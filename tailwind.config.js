@@ -17,4 +17,15 @@ module.exports = {
     },
 
     plugins: [require('@tailwindcss/forms')],
+
+    theme: {
+        extend: {
+            colors: {
+                sidebar: '#1F2937', // Custom sidebar color
+            },
+        },
+    },
+    plugins: [],
+
+    
 };

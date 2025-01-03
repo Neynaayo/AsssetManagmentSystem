@@ -1,4 +1,8 @@
-<x-app-web-layout>
+@extends('layouts.app')
+
+@section('title', 'Import Excel')
+
+@section('content')
 
     <div class="container">
         <div class="row">
@@ -7,14 +11,26 @@
                 @if (session('status'))
                     <div class="alert alert-success">{{session('status')}}</div>
                 @endif
+                @if (session('error'))
+                    <div class="alert alert-danger">{{session('error')}}</div>
+                @endif
 
             <div class="card">
             <div class="card-header">
                 <h2>Import Excel Data into Database in Asset System</h2>
             </div>
+             <!-- Added warning message -->
+             <div class="alert alert-warning mb-3">
+                <strong>Important:</strong>
+                <ul class="mb-0">
+                    <li>Your Excel file must have column headers in Row 1</li>
+                    <li>Data should start from Column A (first column)</li>
+                    <li>Do not leave empty rows before the headers</li>
+                </ul>
+            </div>
             <div class="card-body">
 
-                <form action="{{url('Asset/import')}}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('assets.importExcelData') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="input-group">
@@ -29,4 +45,4 @@
     </div>
 
 
-</x-app-web-layout>
+@endsection

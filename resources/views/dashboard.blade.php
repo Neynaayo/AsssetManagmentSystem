@@ -1,97 +1,319 @@
-{{-- <x-app-layout> --}}
-    {{-- <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("You're logged in!") }}
+@section('title', 'Dashboard')
+
+@section('content')
+<div class="container-fluid px-4">
+    <h2 class="mb-4 text-gray-800">Asset Management Dashboard</h2>
+
+    <!-- Stats Cards Row 1 -->
+    <div class="row g-4 mb-4">
+        <!-- Total Assets Card -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Assets</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalAssets }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-boxes fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Departments Card -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Departments</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalDepartments }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-building fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floors Card -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Floors</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalFloors }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-layer-group fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Companies Card -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Companies</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalCompanies }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-city fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards Row 2 -->
+    <div class="row g-4 mb-4">
+        <!-- Loans Card -->
+        <div class="col-xl-4 col-md-6">
+            <div class="card bg-success text-white shadow h-100">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Loans</div>
+                            <div class="h5 mb-0 font-weight-bold">{{ $loanCount }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-hand-holding fa-2x opacity-75"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div> --}}
-    <html>
-        <head>
-            <title>Dashboard</title>
-            <script src="https://cdn.tailwindcss.com"></script>
-            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-        </head>
-        <body class="bg-gray-100 font-sans leading-normal tracking-normal">
-            <div class="flex">
-                <!-- Sidebar -->
-                <div class="w-64 bg-gray-800 h-screen">
-                    <div class="p-4 text-white text-2xl font-bold">
-                        <i class="fa fa-fax"></i>
-                        Asset Management System
-                    </div>
-                    <nav class="mt-10">
-                        <a class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white text-white" href="{{ url('/dashboard') }}">
-                            <i class="fas fa-tachometer-alt"></i>
-                            Dashboard
-                        </a>
-                        <div class="mt-5">
-                            <a class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white text-gray-400" href="{{ url('Asset') }}">
-                                <i class="fa fa-laptop"></i>
-                                View Asset
-                            </a>
-                            <a class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white text-gray-400" href="{{ url('Asset/import') }}">
-                                <i class="fa fa-file"></i>
-                                Upload/Import Excel
-                            </a>
+
+        <!-- Disposals Card -->
+        <div class="col-xl-4 col-md-6">
+            <div class="card bg-danger text-white shadow h-100">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Disposals</div>
+                            <div class="h5 mb-0 font-weight-bold">{{ $disposalCount }}</div>
                         </div>
-                    </nav>
-                </div>
-                <!-- Main content -->
-                <div class="flex-1 flex flex-col">
-                    <!-- Top bar -->
-                    <div class="flex justify-between items-center bg-white p-4 shadow">
-                        <div class="flex items-center">
-                            <p class="text-xl font-semibold">Dashboard</p>
-                        </div>
-                        <div class="flex items-center">
-                            <form method="POST" action="{{ route('logout') }}" class="ml-auto">
-                                @csrf
-                                <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition duration-200">
-                                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                    <!-- Breadcrumb -->
-                    <div class="bg-gray-100 p-4">
-                        <p class="text-gray-600">
-                            Home / Dashboard
-                        </p>
-                    </div>
-                    <!-- Dashboard content -->
-                    <div class="p-4">
-                        <div class="max-w-sm mx-auto">
-                            <div class="bg-blue-600 text-white p-6 rounded-lg shadow-md">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <p class="text-3xl font-bold">{{ $assetCount ?? 0 }}</p>
-                                        <p class="text-lg mt-1">Total Assets</p>
-                                    </div>
-                                    <div class="text-4xl">
-                                        <i class="fa fa-laptop"></i>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col-auto">
+                            <i class="fas fa-trash-alt fa-2x opacity-75"></i>
                         </div>
                     </div>
                 </div>
             </div>
-            <footer class="bg-gray-100 p-4 text-center">
-                <p class="text-gray-600">
-                    Asset Management System
-                </p>
-            </footer>
-        </body>
-    </html>
+        </div>
 
+        <!-- Available Card -->
+        <div class="col-xl-4 col-md-6">
+            <div class="card bg-primary text-white shadow h-100">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Available</div>
+                            <div class="h5 mb-0 font-weight-bold">{{ $availableCount }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-check-circle fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-{{-- </x-app-layout> --}}
+    <!-- Charts Row -->
+    <div class="row g-4">
+        <!-- Department Chart -->
+        <div class="col-xl-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Assets by Department</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="assetsByDepartmentChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floor Chart -->
+        <div class="col-xl-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Assets by Floor</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="assetsByFloorChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Company Chart -->
+        <div class="col-xl-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Assets by Company</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="assetsByCompanyChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Card Styles */
+.card {
+    border: none;
+    border-radius: 0.35rem;
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+.border-left-primary {
+    border-left: 0.25rem solid #4e73df !important;
+}
+
+.border-left-success {
+    border-left: 0.25rem solid #1cc88a !important;
+}
+
+.border-left-info {
+    border-left: 0.25rem solid #36b9cc !important;
+}
+
+.border-left-warning {
+    border-left: 0.25rem solid #f6c23e !important;
+}
+
+/* Text Styles */
+.text-xs {
+    font-size: 0.7rem;
+}
+
+.text-gray-300 {
+    color: #dddfeb !important;
+}
+
+.text-gray-800 {
+    color: #5a5c69 !important;
+}
+
+/* Chart Card Styles */
+.card-header {
+    background-color: #f8f9fc;
+    border-bottom: 1px solid #e3e6f0;
+}
+
+/* Responsive Padding */
+@media (max-width: 768px) {
+    .container-fluid {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+}
+
+/* Card Animation */
+.card {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Convert PHP data to JavaScript
+    const departmentData = @json($assetsByDepartment);
+    const floorData = @json($assetsByFloor);
+    const companyData = @json($assetsByCompany);
+
+    // Function to generate random colors
+    function generateColors(count) {
+        const colors = [
+            '#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b',
+            '#858796', '#5a5c69', '#2e59d9', '#17a673', '#2c9faf'
+        ];
+        return colors.slice(0, count);
+    }
+
+    // Function to process data for charts
+    const processData = (data) => ({
+        labels: data.map(item => item.name),
+        values: data.map(item => item.value)
+    });
+
+    const department = processData(departmentData);
+    const floor = processData(floorData);
+    const company = processData(companyData);
+
+    // Function to create a Doughnut Chart
+    const createDoughnutChart = (ctx, labels, data, title) => {
+        const colors = generateColors(data.length);
+        return new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: colors,
+                    borderWidth: 1,
+                    cutout: '70%'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true,
+                            font: { size: 11 }
+                        }
+                    }
+                }
+            }
+        });
+    };
+
+    // Set chart canvas height
+    const chartCanvases = document.querySelectorAll('canvas');
+    chartCanvases.forEach(canvas => {
+        canvas.style.height = '300px';
+    });
+
+    // Create Charts
+    createDoughnutChart(document.getElementById('assetsByDepartmentChart'), 
+                       department.labels, department.values, 'Assets by Department');
+    createDoughnutChart(document.getElementById('assetsByFloorChart'), 
+                       floor.labels, floor.values, 'Assets by Floor');
+    createDoughnutChart(document.getElementById('assetsByCompanyChart'), 
+                       company.labels, company.values, 'Assets by Company');
+</script>
+@endsection
