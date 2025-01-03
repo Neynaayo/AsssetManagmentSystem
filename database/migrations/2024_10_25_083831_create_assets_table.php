@@ -12,29 +12,29 @@ return new class extends Migration
      * @return void
      */
     public function up()
-    {
-        Schema::create('assets', function (Blueprint $table) {
-            $table->id();
-            $table->string('asset_name');
-            $table->string('serial_number')->unique();
-            $table->string('asset_no')->unique();
-            $table->string('brand');
-            $table->string('model');
-            $table->string('type');
-            $table->string('spec');
-            $table->string('model');
-            $table->string('domain');
-            $table->string('location');
-            $table->string('company_id');
-            $table->string('department_id');
-            $table->string('user_id');
-            $table->string('previous_user_id');
-            $table->string('paid_by');
-            $table->string('condition');
-            $table->string('remark');
-            $table->timestamps();
-        });
-    }
+{
+    Schema::create('assets', function (Blueprint $table) {
+        $table->id();
+        $table->string('asset_name');
+        $table->string('serial_number')->nullable();
+        $table->string('asset_no')->nullable();
+        $table->string('location')->nullable();
+        $table->string('brand')->nullable();
+        $table->string('model')->nullable();
+        $table->string('type')->nullable();
+        $table->string('spec')->nullable();
+        $table->string('domain')->nullable();
+        $table->foreignId('company_id')->nullable()->constrained('company'); 
+        $table->foreignId('department_id')->nullable()->constrained('department'); 
+        $table->foreignId('user_id')->nullable()->constrained('staff');
+        $table->foreignId('previous_user_id')->nullable()->constrained('staff');
+        $table->string('paid_by')->nullable();
+        $table->string('conditions')->nullable();
+        $table->text('remark')->nullable();
+        $table->timestamps();
+    });
+}
+
 
     /**
      * Reverse the migrations.
