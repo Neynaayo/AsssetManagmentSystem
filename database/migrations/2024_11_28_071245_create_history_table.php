@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('date_loan')->nullable(); // Date of loan
             $table->date('until_date_loan')->nullable(); // Loan return date
             $table->enum('status', ['Available', 'Disposal', 'Loan'])->nullable(); // Limit status options
+            $table->foreignId('disposal_status_id')->nullable()->constrained('disposal_statuses')->onDelete('set null');
             $table->longtext('remark')->nullable(); 
             $table->timestamps(); // Adds created_at and updated_at columns
        

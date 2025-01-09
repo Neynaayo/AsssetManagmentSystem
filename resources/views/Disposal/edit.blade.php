@@ -56,6 +56,18 @@
                                 @error('date_loan') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
 
+                            <div class="form-group">
+                                <label for="disposal_status_id">Disposal Status</label>
+                                <select name="disposal_status_id" id="disposal_status_id" class="form-control">
+                                    @foreach ($statuses as $status)
+                                        <option value="{{ $status->id }}" {{ (isset($disposals) && $disposals->disposal_status_id == $status->id) ? 'selected' : '' }}>
+                                            {{ $status->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            
+
                             {{-- <div class="mb-3">
                                 <label>Until Date disposals</label>
                                 <input type="text" id="until_date_loan" name="until_date_loan" class="form-control flatpickr" value="{{ $disposals->until_date_loan }}" />

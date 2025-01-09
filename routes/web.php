@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AssetController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\DisposalStatusController;
 
 
 Route::get('/', function () {
@@ -136,6 +137,8 @@ Route::middleware(['role:1,3'])->group(function () {
         Route::post('Disposal/import',[App\Http\Controllers\DisposalHistoryController::class,'importExcelData'])->name('disposals.importExcelData');
         //for Export Excel
         Route::get('Disposal/export', [App\Http\Controllers\DisposalHistoryController::class, 'export'])->name('disposals.export');
+        Route::resource('disposal-statuses', DisposalStatusController::class);
+
 
 });
 

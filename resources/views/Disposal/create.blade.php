@@ -43,6 +43,17 @@
                                 <input type="text" name="manual_spec" class="form-control mt-2" placeholder="Spec" />
                             </div>
 
+                            <div class="form-group">
+                                <label for="disposal_status_id">Disposal Status</label>
+                                <select name="disposal_status_id" id="disposal_status_id" class="form-control">
+                                    @foreach ($statuses as $status)
+                                        <option value="{{ $status->id }}" {{ (isset($disposals) && $disposals->disposal_status_id == $status->id) ? 'selected' : '' }}>
+                                            {{ $status->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>                            
+
                             <div class="mb-3">
                                 <label>Date Disposals</label>
                                 <input type="date" 

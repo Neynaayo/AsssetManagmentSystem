@@ -6,6 +6,7 @@ use App\Models\Asset;
 use App\Models\Staff;
 use App\Models\History;
 use Illuminate\Http\Request;
+use App\Models\DisposalStatus;
 use App\Exports\DisposalExport;
 use App\Imports\DisposalImport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -16,41 +17,62 @@ class DisposalHistoryController extends Controller
 
 
    public function index(Request $request)
-    {
-        // Get search input and pagination limit
-        $search = $request->input('search');
-        $perPage = $request->input('per_page', 10);
+{
+    // Get search input, selected disposal status, year, month, and pagination limit
+    $search = $request->input('search');
+    $selectedStatus = $request->input('disposal_status_id');
+    $selectedYear = $request->input('year');
+    $selectedMonth = $request->input('month');
+    $perPage = $request->input('per_page', 10); // Default to 10 items per page
 
-        // Query for loans with related asset and staff details
-        $Disposals = History::where('status', 'Disposal')
-            ->when($search, function ($query, $search) {
-                $query->where('date_loan', 'like', "%{$search}%")
-                    ->orWhere('until_date_loan', 'like', "%{$search}%")
-                    ->orWhere('remark', 'like', "%{$search}%")
-                    ->orWhereHas('asset', function ($assetQuery) use ($search) {
-                        $assetQuery->where('asset_name', 'like', "%{$search}%")
-                            ->orWhere('brand', 'like', "%{$search}%")
-                            ->orWhere('model', 'like', "%{$search}%")
-                            ->orWhere('location', 'like', "%{$search}%")
-                            ->orWhere('serial_number', 'like', "%{$search}%")
-                            ->orWhere('spec', 'like', "%{$search}%");
-                    });
-                    // ->orWhereHas('loanedByStaff', function ($staffQuery) use ($search) {
-                    //     $staffQuery->where('name', 'like', "%{$search}%")
-                    //         ->orWhere('email', 'like', "%{$search}%"); // Add additional staff fields if needed
-                    // });
-            })
-            ->paginate($perPage);
+    // Query for disposals
+    $Disposals = History::where('status', 'Disposal')
+        ->when($selectedStatus, function ($query, $selectedStatus) {
+            $query->where('disposal_status_id', $selectedStatus);
+        })
+        ->when($selectedYear, function ($query, $selectedYear) {
+            $query->whereYear('date_loan', $selectedYear);
+        })
+        ->when($selectedMonth, function ($query, $selectedMonth) {
+            $query->whereMonth('date_loan', $selectedMonth);
+        })
+        ->when($search, function ($query, $search) {
+            $query->orWhere('date_loan', 'like', "%{$search}%")
+                  ->orWhere('until_date_loan', 'like', "%{$search}%")
+                  ->orWhere('remark', 'like', "%{$search}%")
+                  ->orWhereHas('asset', function ($assetQuery) use ($search) {
+                      $assetQuery->where('asset_name', 'like', "%{$search}%")
+                                 ->orWhere('brand', 'like', "%{$search}%")
+                                 ->orWhere('model', 'like', "%{$search}%")
+                                 ->orWhere('location', 'like', "%{$search}%")
+                                 ->orWhere('serial_number', 'like', "%{$search}%")
+                                 ->orWhere('spec', 'like', "%{$search}%");
+                  });
+        })
+        ->with('disposalStatus', 'asset') // Load relationships
+        ->paginate($perPage);
 
-        return view('Disposal.index', compact('Disposals'));
-    }
+    // Get all disposal statuses, years, and months for the filters
+    $statuses = \App\Models\DisposalStatus::all();
+    $years = History::selectRaw('YEAR(date_loan) as year')->distinct()->pluck('year');
+    $months = [
+        1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April',
+        5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August',
+        9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December'
+    ];
+
+    return view('Disposal.index', compact('Disposals', 'statuses', 'years', 'months', 'selectedStatus', 'selectedYear', 'selectedMonth', 'search'));
+}
+
+   
 
    // Show the form to create a new loan
    public function create()
    {
         $asset = Asset::all();
         $staff = Staff::all();
-       return view('Disposal.create',compact('asset','staff'));
+        $statuses = DisposalStatus::all();
+       return view('Disposal.create',compact('statuses','asset','staff'));
    }
 
    // Store a new loan in the database
@@ -66,6 +88,7 @@ class DisposalHistoryController extends Controller
         'manual_serial_number' => 'nullable|string|max:255',
         'manual_spec' => 'nullable|string|max:255',
         'date_loan' => 'required|date',
+        'disposal_status_id' => 'required|exists:disposal_statuses,id',
         'remark' => 'nullable|string|max:255',
     ]);
 
@@ -88,6 +111,7 @@ class DisposalHistoryController extends Controller
     History::create([
         'asset_id' => $assetId,
         'date_loan' => $request->input('date_loan'),
+        'disposal_status_id' => $request->input('disposal_status_id'),
         'status' => 'Disposal',
         'remark' => $request->input('remark'),
     ]);
@@ -101,7 +125,8 @@ class DisposalHistoryController extends Controller
        $disposals = History::findOrFail($id);
        $asset = Asset::all();
         $staff = Staff::all();
-       return view('Disposal.edit', compact('disposals','staff','asset'));
+        $statuses = DisposalStatus::all();
+       return view('Disposal.edit', compact('statuses','disposals','staff','asset'));
    }
 
    // Update an existing loan in the database
@@ -118,6 +143,7 @@ class DisposalHistoryController extends Controller
         'manual_spec' => 'nullable|string|max:255',
         // 'loan_by' => 'nullable|exists:staff,id',
         // 'manual_loan_by' => 'nullable|string|max:255',
+        'disposal_status_id' => 'required|exists:disposal_statuses,id',
         'date_loan' => 'required|date',
         // 'until_date_loan' => 'required|date|after:date_loan',
         'remark' => 'nullable|string|max:255',
@@ -154,6 +180,7 @@ class DisposalHistoryController extends Controller
     $Disposals->update([
         'asset_id' => $assetId ?? $Disposals->asset_id, // Keep existing asset_id if none provided
         'date_loan' => $request->input('date_loan'),
+        'disposal_status_id' => $request->input('disposal_status_id'),
         'status' => 'Disposal',
         'remark' => $request->input('remark'),
     ]);

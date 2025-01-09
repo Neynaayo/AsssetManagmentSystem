@@ -5,6 +5,7 @@ namespace App\Imports;
 use App\Models\History;
 use App\Models\Asset;
 use App\Models\Staff;
+use App\Models\DisposalStatus;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -33,16 +34,23 @@ class DisposalImport implements ToCollection, WithHeadingRow
                 ]
             );
 
-    
+            // Find or create disposal status
+            $disposalStatus = null;
+            if (isset($row['disposal_status'])) {
+                $disposalStatus = DisposalStatus::firstOrCreate(['name' => $row['disposal_status']]);
+            }
 
             // Find existing loan history or create a new one
-            $loan = History::where('asset_id', $asset->id)->where('status', 'Disposal')->first();
+            $loan = History::where('asset_id', $asset->id)
+                           ->where('status', 'Disposal')
+                           ->first();
 
             if ($loan) {
                 // Update existing loan history
                 $loan->update([
                     'date_loan' => $dateLoan,
                     'remark' => $row['remark'],
+                    'disposal_status_id' => $disposalStatus ? $disposalStatus->id : null,
                 ]);
             } else {
                 // Create a new loan history
@@ -51,6 +59,7 @@ class DisposalImport implements ToCollection, WithHeadingRow
                     'date_loan' => $dateLoan,
                     'remark' => $row['remark'],
                     'status' => 'Disposal',
+                    'disposal_status_id' => $disposalStatus ? $disposalStatus->id : null,
                 ]);
             }
         }

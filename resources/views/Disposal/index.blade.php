@@ -18,19 +18,97 @@ use Carbon\Carbon;
                             <a href="{{ route('disposals.create') }}" class="btn btn-primary">
                                 <i class="fas fa-plus-circle"></i> Add Disposals
                             </a>
+                            <a href="{{ route('disposal-statuses.index') }}" class="btn btn-secondary ms-2">
+                                <i class="fas fa-tag"></i> Add Disposal Status
+                            </a>
                         </div>
                     </div>
                     
-                    <div class="card-body">
-                        <!-- Search Form -->
-                        <form action="{{ route('disposals.index') }}" method="GET" class="mb-4">
-                            <div class="input-group">
-                                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search disposals..." class="form-control">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-search"></i> Search
-                                </button>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                          <form method="GET" action="{{ route('disposals.index') }}" class="row g-3">
+                            <!-- Search Input -->
+                            <div class="col-md-6 col-lg-3">
+                              <div class="input-group">
+                                <span class="input-group-text">
+                                  <i class="fas fa-search"></i>
+                                </span>
+                                <input 
+                                  type="text" 
+                                  name="search" 
+                                  value="{{ request('search') }}" 
+                                  class="form-control" 
+                                  placeholder="Search assets..."
+                                >
+                              </div>
                             </div>
-                        </form>
+                      
+                            <!-- Disposal Status Filter -->
+                            <div class="col-md-6 col-lg-3">
+                              <div class="input-group">
+                                <span class="input-group-text">
+                                  <i class="fas fa-tag"></i>
+                                </span>
+                                <select name="disposal_status_id" class="form-select">
+                                  <option value="">All Disposal Statuses</option>
+                                  @foreach ($statuses as $status)
+                                    <option value="{{ $status->id }}" {{ request('disposal_status_id') == $status->id ? 'selected' : '' }}>
+                                      {{ $status->name }}
+                                    </option>
+                                  @endforeach
+                                </select>
+                              </div>
+                            </div>
+                      
+                            <!-- Year Filter -->
+                            <div class="col-md-6 col-lg-3">
+                              <div class="input-group">
+                                <span class="input-group-text">
+                                  <i class="fas fa-calendar-year"></i>
+                                </span>
+                                <select name="year" class="form-select">
+                                  <option value="">All Years</option>
+                                  @foreach ($years as $year)
+                                    <option value="{{ $year }}" {{ request('year') == $year ? 'selected' : '' }}>
+                                      {{ $year }}
+                                    </option>
+                                  @endforeach
+                                </select>
+                              </div>
+                            </div>
+                      
+                            <!-- Month Filter -->
+                            <div class="col-md-6 col-lg-3">
+                              <div class="input-group">
+                                <span class="input-group-text">
+                                  <i class="fas fa-calendar-alt"></i>
+                                </span>
+                                <select name="month" class="form-select">
+                                  <option value="">All Months</option>
+                                  @foreach ($months as $key => $month)
+                                    <option value="{{ $key }}" {{ request('month') == $key ? 'selected' : '' }}>
+                                      {{ $month }}
+                                    </option>
+                                  @endforeach
+                                </select>
+                              </div>
+                            </div>
+                      
+                            <!-- Filter Button -->
+                            <div class="col-12">
+                              <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                  <i class="fas fa-filter me-1"></i> Apply Filters
+                                </button>
+                                <a href="{{ route('disposals.index') }}" class="btn btn-secondary">
+                                  <i class="fas fa-undo me-1"></i> Reset
+                                </a>
+                              </div>
+                            </div>
+                          
+                        
+                        
+                        
 
                         <form action="{{ route('disposals.export') }}" method="GET" class="d-inline-block">
                             <div class="input-group">
@@ -77,6 +155,7 @@ use Carbon\Carbon;
                                         <th>Serial Number</th>
                                         <th>Spec</th>
                                         <th>Date Disposals</th>
+                                        <th>Status Disposals</th>
                                         <th>Remark</th>
                                         <th>Action</th>
 
@@ -97,6 +176,7 @@ use Carbon\Carbon;
                                             <td>{{ $Disposal->asset->serial_number }}</td>
                                             <td>{{ $Disposal->asset->spec }}</td>
                                             <td>{{ $Disposal->date_loan }}</td>
+                                            <td>{{ $Disposal->disposalStatus->name ?? 'N/A' }}</td>
                                             <td>{{ $Disposal->remark }}</td>
                                             <td>
                                                 <a href="{{ route('disposals.edit', $Disposal->id) }}" class="btn btn-outline-success btn-sm">
@@ -149,6 +229,38 @@ use Carbon\Carbon;
 .text-success {
     color: green !important;
     font-weight: bold;
+}
+
+.input-group-text {
+  background-color: #f8f9fa;
+  border-right: none;
+}
+
+.input-group .form-control,
+.input-group .form-select {
+  border-left: none;
+}
+
+.input-group .form-control:focus,
+.input-group .form-select:focus {
+  border-color: #dee2e6;
+  box-shadow: none;
+}
+
+.input-group:hover .input-group-text,
+.input-group:hover .form-control,
+.input-group:hover .form-select {
+  border-color: #adb5bd;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  transition: all 0.2s;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 </style>

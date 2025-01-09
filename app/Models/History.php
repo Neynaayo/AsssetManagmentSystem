@@ -16,6 +16,7 @@ class History extends Model
         'loan_by',
         'date_loan',
         'until_date_loan',
+        'disposal_status_id',
         'status',
         'remark',
     ];
@@ -29,6 +30,12 @@ public function loanedByStaff()
 {
     return $this->belongsTo(Staff::class, 'loan_by');
 }
+
+public function disposalStatus()
+{
+    return $this->belongsTo(DisposalStatus::class);
+}
+
 
 }
 

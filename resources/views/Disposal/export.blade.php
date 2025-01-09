@@ -10,9 +10,8 @@
                 <th>Serial Number</th>
                 <th>Spec</th>
                 <th>Date Disposals</th>
+                <th>Status Disposals</th>
                 <th>Remark</th>
-                <th>Action</th>
-
             </tr>
         </thead>
         <tbody>
@@ -23,15 +22,15 @@
                 @endphp --}}
                 <tr>
                     <td>{{ $index + 1 }}</td>
-                    <td>{{ $disposals->asset->brand }}</td>
-                    <td>{{ $disposals->asset->model }}</td>
-                    <td>{{ $disposals->asset->asset_name }}</td>
-                    <td>{{ $disposals->asset->location }}</td>
-                    <td>{{ $disposals->asset->serial_number }}</td>
-                    <td>{{ $disposals->asset->spec }}</td>
-                    <td>{{ $disposals->date_loan }}</td>
-                    <td>{{ $disposals->remark }}</td>
-                    <td>
+                                            <td>{{ $Disposal->asset->brand }}</td>
+                                            <td>{{ $Disposal->asset->model }}</td>
+                                            <td>{{ $Disposal->asset->asset_name }}</td>
+                                            <td>{{ $Disposal->asset->location }}</td>
+                                            <td>{{ $Disposal->asset->serial_number }}</td>
+                                            <td>{{ $Disposal->asset->spec }}</td>
+                                            <td>{{ $Disposal->date_loan }}</td>
+                                            <td>{{ $Disposal->disposalStatus->name ?? 'N/A' }}</td>
+                                            <td>{{ $Disposal->remark }}</td>
             </tr>
     @endforeach
     </tbody>

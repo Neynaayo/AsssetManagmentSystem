@@ -43,7 +43,7 @@
         /* Right Section (Logo and Title) */
         .image-section {
             flex: 1;
-            background: url('{{ asset('images/waterBg.jpg') }}') no-repeat center center;
+            background: url('{{ asset('images/glowingChipBG.jpg') }}') no-repeat center center;
             background-size: cover;
             display: flex;
             flex-direction: column;
