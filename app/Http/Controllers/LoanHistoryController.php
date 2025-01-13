@@ -49,7 +49,9 @@ class LoanHistoryController extends Controller
     // Show the form to create a new loan
     public function create()
     {
-        $asset = Asset::all();
+        $asset = Asset::whereDoesntHave('histories', function ($query) {
+            $query->where('status', 'Disposal');
+        })->get();
         $staff = Staff::all();
         return view('Loan.create' ,compact('asset','staff'));
     }
@@ -107,7 +109,7 @@ class LoanHistoryController extends Controller
             'remark' => $request->input('remark') ?? null,
         ]);
 
-        return redirect()->route('loans.index')->with('status', 'Loan added successfully!');
+        return redirect()->route('loans.create')->with('status', 'Loan added successfully!');
     }
 
 
@@ -117,7 +119,9 @@ class LoanHistoryController extends Controller
     public function edit(int $id)
     {
         $loan = History::findOrFail($id);
-        $asset = Asset::all();
+        $asset = Asset::whereDoesntHave('histories', function ($query) {
+            $query->where('status', 'Disposal');
+        })->get();
         $staff = Staff::all();
         return view('Loan.edit', compact('loan','staff','asset'));
     }

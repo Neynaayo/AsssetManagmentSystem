@@ -6,40 +6,59 @@
     <x-slot name="title">
        Edit Asset
     </x-slot>
+
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-12">
+                {{-- <!-- Success Modal -->
                 @if (session('status'))
-                    <div class="alert alert-success">{{ session('status') }}</div>  
-                @endif
-
+                    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="successModalLabel">Success</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    {{ session('status') }}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif --}}
+                @if (session('status'))
+                <div class="alert alert-success">{{ session('status') }}</div>
+             @endif
+                <!-- Edit Form -->
                 <div class="card">
                     <div class="card-header">
                         <h4>Edit Asset
-                            <a href="{{ route('assets.index') }}" class="btn btn-prwoimary float-end">Back</a>
+                            <a href="{{ route('assets.index') }}" class="btn btn-primary float-end">Back</a>
                         </h4>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('assets.update', $assets->id) }}" method="POST">
-                            @csrf 
+                            @csrf
                             @method('PUT')
-
 
                             <div class="mb-3">
                                 <label>Location</label>
-                                <input type="text" name="location" class="form-control" value="{{ $assets->location }}" />    
+                                <input type="text" name="location" class="form-control" value="{{ $assets->location }}" />
                                 @error('location') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
 
                             <div class="mb-3">
                                 <label>Asset Name</label>
-                                <input type="text" name="asset_name" class="form-control" value="{{ $assets->asset_name }}" />    
+                                <input type="text" name="asset_name" class="form-control" value="{{ $assets->asset_name }}" />
                                 @error('asset_name') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
 
                             <div class="mb-3">
                                 <label>Serial Number</label>
-                                <input type="text" name="serial_number" class="form-control" value="{{ $assets->serial_number }}" />    
+                                <input type="text" name="serial_number" class="form-control" value="{{ $assets->serial_number }}" />
                                 @error('serial_number') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
 
@@ -174,6 +193,15 @@
             });
         });
     </script>
+    <!-- Trigger Modal Script -->
+    @if (session('status'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                successModal.show();
+            });
+        </script>
+    @endif
 
     <style>
         .select2-container .select2-selection--single {

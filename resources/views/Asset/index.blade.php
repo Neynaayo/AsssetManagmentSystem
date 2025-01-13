@@ -8,6 +8,9 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-12">
+                @if (session('status'))
+                <div class="alert alert-success">{{ session('status') }}</div>
+                @endif
                 <div class="card-custom shadow-sm">
                     <div class="card-header bg-white d-flex justify-content-between align-items-center p-3">
                         <h4 class="mb-0">Asset Management</h4>
@@ -128,7 +131,7 @@
                                                 <a href="{{ route('assets.edit', $asset->id) }}" class="btn btn-outline-success btn-sm">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <a href="{{ route('assets.destroy', $asset->id) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure?')">
+                                                <a href="{{ route('assets.destroy', $asset->id) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure To delete This Asset?')">
                                                     <i class="fas fa-trash"></i>
                                                 </a>
                                             </td>

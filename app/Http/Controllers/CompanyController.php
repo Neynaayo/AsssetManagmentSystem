@@ -64,7 +64,7 @@ class CompanyController extends Controller
             'code'  => $request->code,
             'name' => $request->name,
         ]);
-        return redirect()->back()->with('status','Company Update');
+        return redirect()->route('companies.edit', $id)->with('status','Company Update Successfully.');
         }
 
     public function destroy(int $id)

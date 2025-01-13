@@ -102,7 +102,7 @@ class StaffController extends Controller
 
         ]);
 
-        return redirect()->route('staffs.index')->with('status', 'Staff Created Successfully');
+        return redirect()->route('staffs.create')->with('status', 'Staff Created Successfully');
     }
 
 
@@ -140,7 +140,7 @@ class StaffController extends Controller
             'position' => $request->input('position'),
         ]);
 
-        return redirect()->route('staffs.index')->with('status', 'Staff updated successfully.');
+        return redirect()->route('staffs.edit')->with('status', 'Staff updated successfully.');
     }
 
 

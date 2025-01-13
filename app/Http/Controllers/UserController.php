@@ -57,7 +57,7 @@ class UserController extends Controller
         ]);
     
         // Redirect to the edit page for the newly created user
-        return redirect()->route('users.edit', $user->id)->with('success', 'User created successfully.');
+        return redirect()->route('users.create', $user->id)->with('success', 'User created successfully.');
     }    
 
     // Show form to edit an existing user

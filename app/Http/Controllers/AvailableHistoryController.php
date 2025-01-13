@@ -48,7 +48,9 @@ class AvailableHistoryController extends Controller
     // Show the form to create a new asset
     public function create()
     {
-        $asset = Asset::all();
+        $asset = Asset::whereDoesntHave('histories', function ($query) {
+            $query->where('status', 'Disposal');
+        })->get();
         $staff = Staff::all();
         return view('Available.create',compact('asset','staff'));
     }
@@ -90,14 +92,16 @@ class AvailableHistoryController extends Controller
             'remark' => $request->input('remark'),
         ]);
 
-        return redirect()->route('availables.index')->with('status', 'Available Asset Created');
+        return redirect()->route('availables.create')->with('status', 'Available Asset Created');
     }
 
     // Show the form to edit an existing asset
     public function edit(int $id)
     {
         $available = History::findOrFail($id);
-        $asset = Asset::all();
+        $asset = Asset::whereDoesntHave('histories', function ($query) {
+            $query->where('status', 'Disposal');
+        })->get();
         $staff = Staff::all();
         return view('Available.edit', compact('available','staff','asset'));
     }

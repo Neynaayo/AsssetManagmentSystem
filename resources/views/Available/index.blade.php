@@ -11,6 +11,9 @@ use Carbon\Carbon;
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-12">
+                @if (session('status'))
+                <div class="alert alert-success">{{ session('status') }}</div>
+             @endif
                 <div class="card shadow-sm">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4>Available Asset</h4>
@@ -99,7 +102,7 @@ use Carbon\Carbon;
                                                 <form action="{{ route('availables.destroy', $availables->id) }}" method="POST" style="display: inline-block;">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure to delete this asset?')">
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure to delete this asset Available?')">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>

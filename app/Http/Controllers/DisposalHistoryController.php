@@ -116,7 +116,7 @@ class DisposalHistoryController extends Controller
         'remark' => $request->input('remark'),
     ]);
 
-       return redirect()->route('disposals.index')->with('status', 'Dispossal Asset Created');
+       return redirect()->route('disposals.create')->with('status', 'Dispossal Asset Created');
    }
 
    // Show the form to edit an existing loan

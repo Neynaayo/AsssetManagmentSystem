@@ -28,7 +28,7 @@
                         <form action="{{ route('disposal-statuses.destroy', $status) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure To delete This Status?')">Delete</button>
                         </form>
                     </td>
                 </tr>

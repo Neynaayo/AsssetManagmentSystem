@@ -145,7 +145,7 @@ class AssetController extends Controller
                 'remark' => $request->remark,
             ]);
 
-            return redirect()->route('assets.index')->with('status', 'Asset Created Successfully');
+            return redirect()->route('assets.create')->with('status', 'Asset Created Successfully');
         }
 
     
@@ -217,7 +217,7 @@ class AssetController extends Controller
                 'remark' => $request->input('remark'),
             ]);
 
-            return redirect()->route('assets.index')->with('status', 'Asset updated successfully.');
+            return redirect()->route('assets.edit', $id)->with('status', 'Asset updated successfully.');
         }
 
 

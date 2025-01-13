@@ -84,7 +84,7 @@
                                                 <form action="{{ route('departments.destroy', $department->id) }}" method="POST" style="display: inline-block;">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure?')">
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure To delete This Department?')">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>
