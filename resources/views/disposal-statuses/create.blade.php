@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@section('title','Add Status')
 @section('content')
 <div class="container">
     <h1>Create Disposal Status</h1>

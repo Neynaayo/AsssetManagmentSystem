@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Create Loan')
+@section('title', 'Create Disposals')
 
 @section('content')
     <x-slot name="title">

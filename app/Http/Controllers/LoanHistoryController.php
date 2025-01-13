@@ -191,7 +191,7 @@ class LoanHistoryController extends Controller
         $loan = History::findOrFail($id);
         $loan->delete();
 
-        return redirect()->back()->with('status', 'Loan Deleted');
+        return redirect()->back()->with('status', 'Loan Asset Deleted');
     }
 
     public function import(){

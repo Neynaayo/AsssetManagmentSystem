@@ -8,6 +8,7 @@ use App\Models\History;
 use Illuminate\Http\Request;
 use App\Exports\AvailableExport;
 use App\Imports\AvailableImport;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 
 class AvailableHistoryController extends Controller
@@ -83,6 +84,12 @@ class AvailableHistoryController extends Controller
                 'spec' => $request->input('manual_spec'),
             ]);
             $assetId = $asset->id;
+            // Log the asset creation
+        Log::info('New asset created: ', ['id' => $assetId]);
+        }
+
+        if (!$assetId) {
+            return redirect()->back()->withErrors(['asset' => 'Failed to create or find an asset']);
         }
 
         // Create the new asset

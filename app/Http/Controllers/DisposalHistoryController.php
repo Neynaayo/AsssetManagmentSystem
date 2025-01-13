@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\DisposalStatus;
 use App\Exports\DisposalExport;
 use App\Imports\DisposalImport;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 
 class DisposalHistoryController extends Controller
@@ -77,47 +78,51 @@ class DisposalHistoryController extends Controller
 
    // Store a new loan in the database
    public function store(Request $request)
-   {
-       // Validate the request data
-       $request->validate([
-        'asset_id' => 'nullable|exists:assets,id',
-        'manual_asset_name' => 'nullable|string|max:255',
-        'manual_brand' => 'nullable|string|max:255',
-        'manual_model' => 'nullable|string|max:255',
-        'manual_location' => 'nullable|string|max:255',
-        'manual_serial_number' => 'nullable|string|max:255',
-        'manual_spec' => 'nullable|string|max:255',
-        'date_loan' => 'required|date',
-        'disposal_status_id' => 'required|exists:disposal_statuses,id',
-        'remark' => 'nullable|string|max:255',
-    ]);
-
-    // Handle asset
-    $assetId = $request->input('asset_id');
-    if (!$assetId && $request->filled(['manual_asset_name', 'manual_brand', 'manual_model'])) {
-        // Insert into assets table if manual entry
-        $asset = Asset::create([
-            'asset_name' => $request->input('manual_asset_name'),
-            'brand' => $request->input('manual_brand'),
-            'model' => $request->input('manual_model'),
-            'location' => $request->input('manual_location'),
-            'serial_number' => $request->input('manual_serial_number'),
-            'spec' => $request->input('manual_spec'),
+    {
+        $request->validate([
+            'asset_id' => 'nullable|exists:assets,id',
+            'manual_asset_name' => 'nullable|string|max:255',
+            'manual_brand' => 'nullable|string|max:255',
+            'manual_model' => 'nullable|string|max:255',
+            'manual_location' => 'nullable|string|max:255',
+            'manual_serial_number' => 'nullable|string|max:255',
+            'manual_spec' => 'nullable|string|max:255',
+            'date_loan' => 'required|date',
+            'disposal_status_id' => 'required|exists:disposal_statuses,id',
+            'remark' => 'nullable|string|max:255',
         ]);
-        $assetId = $asset->id;
-    }
 
-    // Create loan record
-    History::create([
-        'asset_id' => $assetId,
-        'date_loan' => $request->input('date_loan'),
-        'disposal_status_id' => $request->input('disposal_status_id'),
-        'status' => 'Disposal',
-        'remark' => $request->input('remark'),
-    ]);
+        // Handle asset
+        $assetId = $request->input('asset_id');
+        if (!$assetId && $request->filled(['manual_asset_name', 'manual_brand', 'manual_model'])) {
+            $asset = Asset::create([
+                'asset_name' => $request->input('manual_asset_name'),
+                'brand' => $request->input('manual_brand'),
+                'model' => $request->input('manual_model'),
+                'location' => $request->input('manual_location'),
+                'serial_number' => $request->input('manual_serial_number'),
+                'spec' => $request->input('manual_spec'),
+            ]);
+            $assetId = $asset->id;
+            // Log the asset creation
+            Log::info('New asset created: ', ['id' => $assetId]);
+        }
 
-       return redirect()->route('disposals.create')->with('status', 'Dispossal Asset Created');
-   }
+        if (!$assetId) {
+            return redirect()->back()->withErrors(['asset' => 'Failed to create or find an asset']);
+        }
+
+        // Create disposal history
+        History::create([
+            'asset_id' => $assetId,
+            'date_loan' => $request->input('date_loan'),
+            'disposal_status_id' => $request->input('disposal_status_id'),
+            'status' => 'Disposal',
+            'remark' => $request->input('remark'),
+        ]);
+
+        return redirect()->route('disposals.create')->with('status', 'Disposal asset created successfully.');
+}
 
    // Show the form to edit an existing loan
    public function edit(int $id)

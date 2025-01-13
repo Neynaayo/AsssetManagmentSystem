@@ -108,10 +108,6 @@ use Carbon\Carbon;
                                 </a>
                               </div>
                             </div>
-                          
-                        
-                        
-                        
 
                         <form action="{{ route('disposals.export') }}" method="GET" class="d-inline-block">
                             <div class="input-group">
