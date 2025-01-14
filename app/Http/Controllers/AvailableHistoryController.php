@@ -110,7 +110,9 @@ class AvailableHistoryController extends Controller
             $query->where('status', 'Disposal');
         })->get();
         $staff = Staff::all();
-        return view('Available.edit', compact('available','staff','asset'));
+        // If the selected asset is linked to this available record
+        $selectedAsset = $available->asset_id ? Asset::find($available->asset_id) : null;
+        return view('Available.edit', compact('available','staff','asset','selectedAsset'));
     }
 
     // Update an existing asset in the database

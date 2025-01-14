@@ -131,7 +131,9 @@ class DisposalHistoryController extends Controller
        $asset = Asset::all();
         $staff = Staff::all();
         $statuses = DisposalStatus::all();
-       return view('Disposal.edit', compact('statuses','disposals','staff','asset'));
+        // If the selected asset is linked to this available record
+        $selectedAsset = $disposals->asset_id ? Asset::find($disposals->asset_id) : null;
+       return view('Disposal.edit', compact('statuses','disposals','staff','asset','selectedAsset'));
    }
 
    // Update an existing loan in the database

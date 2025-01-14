@@ -26,11 +26,16 @@
 
                             <div class="mb-3">
                                 <label>Asset</label>
-                                <select name="asset_id" class="form-control select2">
+                                <select name="asset_id" id="asset_id" class="form-control select2">
                                     <option value="">Select Existing Asset</option>
                                     @foreach($asset as $assets)
                                         <option value="{{ $assets->id }}" 
-                                            {{ $loan->asset_id == $assets->id ? 'selected' : '' }}>
+                                            {{ $loan->asset_id == $assets->id ? 'selected' : '' }}
+                                            data-brand="{{ $assets->brand }}"
+                                            data-model="{{ $assets->model }}"
+                                            data-location="{{ $assets->location }}"
+                                            data-serial-number="{{ $assets->serial_number }}"
+                                            data-spec="{{ $assets->spec }}">
                                             {{ $assets->asset_name }} - ({{ $assets->serial_number }})
                                         </option>
                                     @endforeach
@@ -38,20 +43,18 @@
                                 @error('asset_id') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
 
-                            <div class="mb-3">
-                                <label>Or Add New Asset</label>
-                                <input type="text" name="manual_asset_name" class="form-control" placeholder="Asset Name" value="{{ old('manual_asset_name') }}" />
-                                <input type="text" name="manual_brand" class="form-control mt-2" placeholder="Brand" value="{{ old('manual_brand') }}" />
-                                <input type="text" name="manual_model" class="form-control mt-2" placeholder="Model" value="{{ old('manual_model') }}" />
-                                <input type="text" name="manual_location" class="form-control mt-2" placeholder="Location" value="{{ old('manual_location') }}" />
-                                <input type="text" name="manual_serial_number" class="form-control mt-2" placeholder="Serial Number" value="{{ old('manual_serial_number') }}" />
-                                <input type="text" name="manual_spec" class="form-control mt-2" placeholder="Specifications" value="{{ old('manual_spec') }}" />
-                                @error('manual_asset_name') <span class="text-danger">{{ $message }}</span> @enderror
+                            <div id="asset-fields" class="mb-3">
+                                <label>Asset Details</label>
+                                <input type="text" id="brand" class="form-control mt-2" placeholder="Brand" readonly>
+                                <input type="text" id="model" class="form-control mt-2" placeholder="Model" readonly>
+                                <input type="text" id="location" class="form-control mt-2" placeholder="Location" readonly>
+                                <input type="text" id="serial_number" class="form-control mt-2" placeholder="Serial Number" readonly>
+                                <input type="text" id="spec" class="form-control mt-2" placeholder="Specifications" readonly>
                             </div>
 
                             <div class="mb-3">
                                 <label>Loan By</label>
-                                <select name="loan_by" class="form-control select2">
+                                <select name="loan_by" id="loan_by" class="form-control select2">
                                     <option value="">Select Existing Staff</option>
                                     @foreach($staff as $person)
                                         <option value="{{ $person->id }}" 
@@ -86,6 +89,12 @@
                                 <input type="text" name="remark" class="form-control" value="{{ $loan->remark }}" />
                                 @error('remark') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
+                            <p class="text-muted small">
+                                <i class="fas fa-info-circle"></i> If you want to edit Asset Details, please go to the 
+                                <a href="{{ route('assets.edit', $loan->asset_id) }}" class="text-primary text-decoration-underline">
+                                    Asset Management
+                                </a> section.
+                            </p>
 
                             <div class="mb-3">
                                 <button type="submit" class="btn btn-primary">Update</button>
@@ -118,4 +127,29 @@
             });
         });
     </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const assetDropdown = document.getElementById('asset_id');
+        const brandField = document.getElementById('brand');
+        const modelField = document.getElementById('model');
+        const locationField = document.getElementById('location');
+        const serialNumberField = document.getElementById('serial_number');
+        const specField = document.getElementById('spec');
+
+        function updateAssetFields() {
+            const selectedOption = assetDropdown.options[assetDropdown.selectedIndex];
+            brandField.value = selectedOption.getAttribute('data-brand') || '';
+            modelField.value = selectedOption.getAttribute('data-model') || '';
+            locationField.value = selectedOption.getAttribute('data-location') || '';
+            serialNumberField.value = selectedOption.getAttribute('data-serial-number') || '';
+            specField.value = selectedOption.getAttribute('data-spec') || '';
+        }
+
+        assetDropdown.addEventListener('change', updateAssetFields);
+
+        // Autofill fields on page load if an asset is already selected
+        updateAssetFields();
+    });
+</script>
 @endsection

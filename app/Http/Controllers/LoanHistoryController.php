@@ -122,8 +122,10 @@ class LoanHistoryController extends Controller
         $asset = Asset::whereDoesntHave('histories', function ($query) {
             $query->where('status', 'Disposal');
         })->get();
+        // If the selected asset is linked to this available record
+        $selectedAsset = $loan->asset_id ? Asset::find($loan->asset_id) : null;
         $staff = Staff::all();
-        return view('Loan.edit', compact('loan','staff','asset'));
+        return view('Loan.edit', compact('loan','staff','asset','selectedAsset'));
     }
 
     // Update an existing loan in the database
