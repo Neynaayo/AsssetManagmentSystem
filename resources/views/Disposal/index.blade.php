@@ -123,21 +123,24 @@ use Carbon\Carbon;
                             </div>
                         </form>
 
+                       
+
                         <!-- Pagination and Entries Section -->
                         <div class="d-flex justify-content-between mb-3">
                             <div class="form-inline">
                                 <label for="perPage" class="me-2">Show:</label>
                                 <form id="perPageForm" action="{{ route('disposals.index') }}" method="GET" class="form-inline">
-                                    <input type="hidden" name="search" value="{{ request('search') }}">
-                                    <select id="perPage" name="per_page" class="form-select" onchange="document.getElementById('perPageForm').submit();">
-                                    <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
-                                    <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
-                                    <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
-                                    <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
-                                </select>
+                                  <input type="hidden" name="search" value="{{ request('search') }}">
+                                  <select id="perPage" name="per_page" class="form-select" onchange="document.getElementById('perPageForm').submit();">
+                                      <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
+                                      <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
+                                      <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
+                                      <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
+                                  </select>
+                              </form>
                             </div>
                             <div>
-                                {{ $Disposals->links() }}
+                                {{ $disposals->links() }}
                             </div>
                         </div>
 
@@ -154,34 +157,34 @@ use Carbon\Carbon;
                                         <th>Serial Number</th>
                                         <th>Spec</th>
                                         <th>Date Disposals</th>
-                                        <th>Status Disposals</th>
+                                        <th>Disposal Status</th>
                                         <th>Remark</th>
                                         <th>Action</th>
 
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($Disposals as $index => $Disposal)
+                                    @foreach ($disposals as $index => $disposal)
                                         @php
-                                            $untilDateLoan = \Carbon\Carbon::parse($Disposal->until_date_loan);
+                                            $untilDateLoan = \Carbon\Carbon::parse($disposal->until_date_loan);
                                             $isOverdue = $untilDateLoan->isPast();
                                         @endphp
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
-                                            <td>{{ $Disposal->asset->brand }}</td>
-                                            <td>{{ $Disposal->asset->model }}</td>
-                                            <td>{{ $Disposal->asset->asset_name }}</td>
-                                            <td>{{ $Disposal->asset->location }}</td>
-                                            <td>{{ $Disposal->asset->serial_number }}</td>
-                                            <td>{{ $Disposal->asset->spec }}</td>
-                                            <td>{{ $Disposal->date_loan }}</td>
-                                            <td>{{ $Disposal->disposalStatus->name ?? 'N/A' }}</td>
-                                            <td>{{ $Disposal->remark }}</td>
+                                            <td>{{ $disposal->asset->brand }}</td>
+                                            <td>{{ $disposal->asset->model }}</td>
+                                            <td>{{ $disposal->asset->asset_name }}</td>
+                                            <td>{{ $disposal->asset->location }}</td>
+                                            <td>{{ $disposal->asset->serial_number }}</td>
+                                            <td>{{ $disposal->asset->spec }}</td>
+                                            <td>{{ $disposal->date_loan }}</td>
+                                            <td>{{ $disposal->disposalStatus->name ?? 'N/A' }}</td>
+                                            <td>{{ $disposal->remark }}</td>
                                             <td>
-                                                <a href="{{ route('disposals.edit', $Disposal->id) }}" class="btn btn-outline-success btn-sm">
+                                                <a href="{{ route('disposals.edit', $disposal->id) }}" class="btn btn-outline-success btn-sm">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <form action="{{ route('disposals.destroy', $Disposal->id) }}" method="POST" style="display: inline-block;">
+                                                <form action="{{ route('disposals.destroy', $disposal->id) }}" method="POST" style="display: inline-block;">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure To delete This Asset Disposal?')">
@@ -195,7 +198,7 @@ use Carbon\Carbon;
                             </table>
                         </div>
                         <div class="d-flex justify-content-center mt-3">
-                            {{ $Disposals->links('pagination::bootstrap-5') }}
+                            {{ $disposals->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>
@@ -224,42 +227,42 @@ use Carbon\Carbon;
     .text-danger {
     color: red !important;
     font-weight: bold;
-}
-.text-success {
-    color: green !important;
-    font-weight: bold;
-}
+  }
+  .text-success {
+      color: green !important;
+      font-weight: bold;
+  }
 
-.input-group-text {
-  background-color: #f8f9fa;
-  border-right: none;
-}
+  .input-group-text {
+    background-color: #f8f9fa;
+    border-right: none;
+  }
 
-.input-group .form-control,
-.input-group .form-select {
-  border-left: none;
-}
+  .input-group .form-control,
+  .input-group .form-select {
+    border-left: none;
+  }
 
-.input-group .form-control:focus,
-.input-group .form-select:focus {
-  border-color: #dee2e6;
-  box-shadow: none;
-}
+  .input-group .form-control:focus,
+  .input-group .form-select:focus {
+    border-color: #dee2e6;
+    box-shadow: none;
+  }
 
-.input-group:hover .input-group-text,
-.input-group:hover .form-control,
-.input-group:hover .form-select {
-  border-color: #adb5bd;
-}
+  .input-group:hover .input-group-text,
+  .input-group:hover .form-control,
+  .input-group:hover .form-select {
+    border-color: #adb5bd;
+  }
 
-.btn {
-  padding: 0.5rem 1rem;
-  transition: all 0.2s;
-}
+  .btn {
+    padding: 0.5rem 1rem;
+    transition: all 0.2s;
+  }
 
-.btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
+  .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
 
 </style>

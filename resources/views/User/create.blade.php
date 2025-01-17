@@ -63,7 +63,7 @@
                                 @error('email') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
 
-                            <!-- Role Field -->
+                            {{-- <!-- Role Field -->
                             <div class="mb-3">
                                 <label for="roleid">Role</label>
                                 <select id="roleid" name="roleid" class="form-control">
@@ -71,6 +71,23 @@
                                     <option value="2" {{ (isset($user) && $user->roleid == 2) ? 'selected' : '' }}>Admin</option>
                                 </select>
                                 @error('roleid') <span class="text-danger">{{ $message }}</span> @enderror
+                            </div> --}}
+
+                            <!-- Role Dropdown -->
+                            <div class="mb-3">
+                                <label for="roleid">Role</label>
+                                <select id="roleid" name="roleid" class="form-select select2">
+                                    <option value="">Select Role</option>
+                                    @foreach ($roles as $role)
+                                        <option value="{{ $role->id }}"
+                                            {{ (isset($user) && $user->roleid == $role->id) || old('roleid') == $role->id ? 'selected' : '' }}>
+                                            {{ $role->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('roleid') 
+                                    <span class="text-danger">{{ $message }}</span> 
+                                @enderror
                             </div>
 
                             <!-- Department Field -->

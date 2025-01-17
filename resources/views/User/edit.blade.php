@@ -17,7 +17,7 @@
                         </h4>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('users.update', $user->id) }}" method="POST">
+                        <form id="userEditForm" action="{{ route('users.update', $user->id) }}" method="POST">
                             @csrf
                             @method('PUT')
 
@@ -63,11 +63,46 @@
                                 @error('roleid') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
 
+                            <!-- Password Update -->
                             <div class="mb-3">
-                                <button type="submit" class="btn btn-primary">Update</button>
+                                <label for="password">New Password</label>
+                                <input type="password" name="password" id="password" class="form-control" placeholder="Enter new password" />
+                                @error('password') <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password_confirmation">Confirm New Password</label>
+                                <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="Confirm new password" />
+                                @error('password_confirmation') <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#confirmModal">
+                                    Update User
+                                </button>
                             </div>
                         </form>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel">Confirm Update</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to update this user's information, including their password (if provided)?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="document.getElementById('userEditForm').submit();">Yes, Update</button>
                 </div>
             </div>
         </div>
@@ -94,13 +129,6 @@
         }
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             height: 38px;
-        }
-        .custom-select2-dropdown .select2-results__option {
-            padding: 8px;
-        }
-        .custom-select2-dropdown .select2-results__option--highlighted {
-            background-color: #d3d3d3;
-            color: #000;
         }
     </style>
 @endsection

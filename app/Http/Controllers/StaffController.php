@@ -8,6 +8,7 @@ use App\Models\Department;
 use App\Exports\StaffExport;
 use App\Imports\StaffImport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -140,17 +141,18 @@ class StaffController extends Controller
             'position' => $request->input('position'),
         ]);
 
-        return redirect()->route('staffs.edit')->with('status', 'Staff updated successfully.');
+        return redirect()->route('staffs.edit',$id)->with('status', 'Staff updated successfully.');
     }
 
 
 
-    public function destroy(int $id)
+    public function destroy(int $id, Request $request)
     {
-        $staff = Staff::findOrFail($id);
-        $staff->delete();
-        return redirect()->back()->with('status', 'Staff Deleted Successfully');
+        $staffs = Staff::findOrFail($id);
+            $staffs->delete();
+            return redirect()->back()->with('staffs', 'Staff Deleted Successfully');
     }
+    
 
 public function import(){
     return view('Staff.Excelimport');

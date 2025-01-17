@@ -154,10 +154,10 @@ use Carbon\Carbon;
     .text-danger {
     color: red !important;
     font-weight: bold;
-}
-.text-success {
-    color: green !important;
-    font-weight: bold;
-}
+    }
+    .text-success {
+        color: green !important;
+        font-weight: bold;
+    }
 
 </style>

@@ -10,7 +10,8 @@
             <div class="col-md-12">
                 @if (session('status'))
                 <div class="alert alert-success">{{ session('status') }}</div>
-             @endif
+                @endif
+
                 <div class="card shadow-sm">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4>Staff Management</h4>
@@ -143,13 +144,10 @@
                                                class="btn btn-sm btn-primary">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form action="{{ route('staffs.destroy', $staffMember->id) }}" 
-                                                  method="POST" 
-                                                  class="d-inline"
-                                                  onsubmit="return confirm('Are you sure you want to delete this staff member?')">
+                                            <form action="{{ route('staffs.destroy', $staffMember->id) }}" method="POST" style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure To delete This Staffs?')">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>

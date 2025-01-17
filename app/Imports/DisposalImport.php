@@ -37,7 +37,9 @@ class DisposalImport implements ToCollection, WithHeadingRow
             // Find or create disposal status
             $disposalStatus = null;
             if (isset($row['disposal_status'])) {
-                $disposalStatus = DisposalStatus::firstOrCreate(['name' => $row['disposal_status']]);
+                $disposalStatus = DisposalStatus::firstOrCreate(
+                    ['name' => $row['disposal_status']]
+                );
             }
 
             // Find existing loan history or create a new one
@@ -57,9 +59,9 @@ class DisposalImport implements ToCollection, WithHeadingRow
                 History::create([
                     'asset_id' => $asset->id,
                     'date_loan' => $dateLoan,
-                    'remark' => $row['remark'],
                     'status' => 'Disposal',
                     'disposal_status_id' => $disposalStatus ? $disposalStatus->id : null,
+                    'remark' => $row['remark'],
                 ]);
             }
         }

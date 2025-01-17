@@ -46,25 +46,26 @@
                             </div>
                         </form>
 
-                        <!-- Pagination and Entries Section -->
+                       <!-- Pagination and Entries Section -->
                         <div class="d-flex justify-content-between mb-3">
                             <div class="form-inline">
                                 <label for="perPage" class="me-2">Show:</label>
                                 <form id="perPageForm" action="{{ route('users.index') }}" method="GET" class="form-inline">
                                     <input type="hidden" name="search" value="{{ request('search') }}">
                                     <select id="perPage" name="per_page" class="form-select" onchange="document.getElementById('perPageForm').submit();">
-                                    <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
-                                    <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
-                                    <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
-                                    <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
-                                </select>
+                                        <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
+                                        <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
+                                        <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
+                                        <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
+                                    </select>
+                                </form>
                             </div>
                             <div>
-                                {{ $user->links() }}
+                                {{ $users->links('pagination::bootstrap-5') }}
                             </div>
                         </div>
 
-                        <!-- Asset Table -->
+                        <!-- User Table -->
                         <div class="table-responsive">
                             <table class="table table-hover table-striped align-middle">
                                 <thead class="table-dark">
@@ -77,33 +78,32 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($user as $index => $users)
+                                    @foreach ($users as $user)
                                         <tr>
-                                            <td>{{ $users->name }}</td>
-                                            <td>{{ $users->email }}</td>
-                                            {{-- <td>{{ $user->roleid == 1 ? 'Super Admin' : 'Admin' }}</td> --}}
-                                            <td>{{ $users->role ? $users->role->name : 'N/A' }}</td>
-                                            <td>{{ $users->department->name ?? 'N/A' }}</td>
+                                            <td>{{ $user->name }}</td>
+                                            <td>{{ $user->email }}</td>
+                                            <td>{{ $user->role ? $user->role->name : 'N/A' }}</td>
+                                            <td>{{ $user->department->name ?? 'N/A' }}</td>
                                             <td>
-                                                <a href="{{ route('users.edit', $users->id) }}" class="btn btn-outline-success btn-sm">
+                                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-outline-success btn-sm">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <form action="{{ route('users.destroy', $users->id) }}" method="POST" style="display: inline-block;">
+                                                <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display: inline-block;">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure To delete This User?')">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>
-                                                
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
+
                         <div class="d-flex justify-content-center mt-3">
-                            {{ $user->links('pagination::bootstrap-5') }}
+                            {{ $users->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>

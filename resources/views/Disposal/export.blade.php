@@ -10,27 +10,27 @@
                 <th>Serial Number</th>
                 <th>Spec</th>
                 <th>Date Disposals</th>
-                <th>Status Disposals</th>
+                <th>Disposal Status</th>
                 <th>Remark</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($disposals as $index => $disposals)
+            @foreach ($disposals as $index => $disposal)
                 {{-- @php
                     $untilDateLoan = \Carbon\Carbon::parse($Disposals->until_date_loan);
                     $isOverdue = $untilDateLoan->isPast();
                 @endphp --}}
                 <tr>
                     <td>{{ $index + 1 }}</td>
-                                            <td>{{ $Disposal->asset->brand }}</td>
-                                            <td>{{ $Disposal->asset->model }}</td>
-                                            <td>{{ $Disposal->asset->asset_name }}</td>
-                                            <td>{{ $Disposal->asset->location }}</td>
-                                            <td>{{ $Disposal->asset->serial_number }}</td>
-                                            <td>{{ $Disposal->asset->spec }}</td>
-                                            <td>{{ $Disposal->date_loan }}</td>
-                                            <td>{{ $Disposal->disposalStatus->name ?? 'N/A' }}</td>
-                                            <td>{{ $Disposal->remark }}</td>
+                                            <td>{{ $disposal->asset->brand }}</td>
+                                            <td>{{ $disposal->asset->model }}</td>
+                                            <td>{{ $disposal->asset->asset_name }}</td>
+                                            <td>{{ $disposal->asset->location }}</td>
+                                            <td>{{ $disposal->asset->serial_number }}</td>
+                                            <td>{{ $disposal->asset->spec }}</td>
+                                            <td>{{ $disposal->date_loan }}</td>
+                                            <td>{{ $disposal->disposalStatus->name ?? 'N/A' }}</td>
+                                            <td>{{ $disposal->remark }}</td>
             </tr>
     @endforeach
     </tbody>

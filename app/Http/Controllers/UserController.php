@@ -15,26 +15,35 @@ class UserController extends Controller
     // Display list of users
     public function index(Request $request)
     {
-        $search = $request->input('search');
-        $perPage = $request->input('per_page', 50);
-
-        // Build the query for assets
-        $user = User::query()
-        ->when($search, function ($query, $search) {
-            $query->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('roleid', 'like', "%{$search}%")
-                  ->orWhere('department_id', 'like', "%{$search}%");
-                });
-        $user = $user->paginate($perPage);
-        return view('User.index', compact('user'));
+        $search = $request->input('search'); // Capture the search term
+        $perPage = $request->input('per_page', 50); // Set pagination limit, default is 50
+    
+        // Query for users
+        $users = User::query()
+            ->with(['role', 'department']) // Eager load relationships
+            ->when($search, function ($query, $search) {
+                $query->where('name', 'like', "%{$search}%") // Search by name
+                    ->orWhere('email', 'like', "%{$search}%") // Search by email
+                    ->orWhereHas('role', function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%"); // Search in roles
+                    })
+                    ->orWhereHas('department', function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%"); // Search in departments
+                    });
+            })
+            ->paginate($perPage); // Paginate the results
+    
+        return view('User.index', compact('users')); // Pass the users to the view
     }
+    
+
 
     // Show form to create a new user
     public function create()
     {
         $department = Department::all();
-        return view('User.create', compact('department'));
+        $roles = Role::all(); // Fetch all roles
+        return view('User.create', compact('department','roles'));
     }
 
     // Store a new user
@@ -76,22 +85,24 @@ class UserController extends Controller
         public function update(Request $request,int $id)
         {
             $user = User::findOrFail($id);
-        
+
             $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
                 'roleid' => 'required|integer|exists:roles,id',
-                'department_id' => 'nullable|exists:department,id', // Fix the table name
+                'department_id' => 'nullable|exists:department,id',
+                'password' => 'nullable|string|min:8|confirmed', // Add password validation
             ]);
-        
-            $user->update([
-                'name' => $request->name,
-                'email' => $request->email,
-                'roleid' => $request->roleid,
-                'department_id' => $request->department_id,
-            ]);
-        
-            // Pass the $id to the users.edit route
+
+            $data = $request->only(['name', 'email', 'roleid', 'department_id']);
+
+            // Check if password is provided
+            if ($request->filled('password')) {
+                $data['password'] = Hash::make($request->password); // Hash the password
+            }
+
+            $user->update($data);
+
             return redirect()->route('users.edit', $id)->with('success', 'User updated successfully.');
         }
         

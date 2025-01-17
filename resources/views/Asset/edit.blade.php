@@ -75,6 +75,18 @@
                             </div>
 
                             <div class="mb-3">
+                                <label>Brand </label>
+                                <input type="text" name="brand" class="form-control" value="{{$assets->brand }}"/>
+                                @error('brand') <span class="text-danger">{{ $message }}</span>@enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Model </label>
+                                <input type="text" name="model" class="form-control" value="{{$assets->model }}"/>
+                                @error('model') <span class="text-danger">{{ $message }}</span>@enderror
+                            </div>
+
+                            <div class="mb-3">
                                 <label>Spec</label>
                                 <input type="text" name="spec" class="form-control" value="{{ $assets->spec }}" />    
                                 @error('spec') <span class="text-danger">{{ $message }}</span> @enderror
