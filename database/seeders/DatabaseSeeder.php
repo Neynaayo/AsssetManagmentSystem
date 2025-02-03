@@ -18,7 +18,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolesSeeder::class,
             UsersSeeder::class,
-            DisposalStatusesSeeder::class, // Include your existing seeder
+            DisposalStatusesSeeder::class,
+            DepartmentSeeder::class,
+            CompanySeeder::class, // Include your existing seeder
         ]);
     }
 }

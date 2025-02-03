@@ -22,15 +22,15 @@
                 @endphp --}}
                 <tr>
                     <td>{{ $index + 1 }}</td>
-                                            <td>{{ $disposal->asset->brand }}</td>
-                                            <td>{{ $disposal->asset->model }}</td>
-                                            <td>{{ $disposal->asset->asset_name }}</td>
-                                            <td>{{ $disposal->asset->location }}</td>
-                                            <td>{{ $disposal->asset->serial_number }}</td>
-                                            <td>{{ $disposal->asset->spec }}</td>
-                                            <td>{{ $disposal->date_loan }}</td>
-                                            <td>{{ $disposal->disposalStatus->name ?? 'N/A' }}</td>
-                                            <td>{{ $disposal->remark }}</td>
+                    <td>{{ $disposal->asset->brand }}</td>
+                    <td>{{ $disposal->asset->model }}</td>
+                    <td>{{ $disposal->asset->asset_name }}</td>
+                    <td>{{ $disposal->asset->location }}</td>
+                    <td>{{ $disposal->asset->serial_number }}</td>
+                    <td>{{ $disposal->asset->spec }}</td>
+                    <td>{{ $disposal->date_loan }}</td>
+                    <td>{{ $disposal->disposalStatus->name ?? 'N/A' }}</td>
+                    <td>{{ $disposal->remark }}</td>
             </tr>
     @endforeach
     </tbody>

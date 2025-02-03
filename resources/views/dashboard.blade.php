@@ -76,9 +76,9 @@
             </div>
         </div>
     </div>
-
-    <!-- Stats Cards Row 2 -->
-    <div class="row g-4 mb-4">
+<!-- Stats Cards Row 2 -->
+<div class="row g-4 mb-4">
+    @if(Auth::user()->roleid == 1)
         <!-- Loans Card -->
         <div class="col-xl-4 col-md-6">
             <div class="card bg-success text-white shadow h-100">
@@ -129,8 +129,8 @@
                 </div>
             </div>
         </div>
-    </div>
-
+    @endif
+</div>
     <!-- Charts Row -->
     <div class="row g-4">
         <!-- Department Chart -->
