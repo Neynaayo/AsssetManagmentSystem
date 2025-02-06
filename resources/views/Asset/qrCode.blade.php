@@ -52,6 +52,8 @@
                 <!-- Scanning Instructions -->
                 <div class="mt-4 text-muted">
                     <p><i class="fas fa-info-circle me-2"></i>Scan this QR code to view complete asset details</p>
+                    <a href="{{ route('assets.index') }}" class="btn btn-primary float-end">Back</a>
+
                 </div>
             </div>
         </div>

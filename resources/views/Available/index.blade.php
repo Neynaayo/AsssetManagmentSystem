@@ -12,49 +12,55 @@ use Carbon\Carbon;
         <div class="row">
             <div class="col-md-12">
                 @if (session('status'))
-                <div class="alert alert-success">{{ session('status') }}</div>
-             @endif
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('status') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
+
+                  <!-- Card -->
                 <div class="card shadow-sm">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h4>Available Asset</h4>
-                        <div>
+                   <div class="card-header bg-white d-flex justify-content-between align-items-center p-3">
+                       <h4 class="mb-0">Available Asset</h4>
+                        <div class="d-flex gap-2">
                             <a href="{{ route('availables.create') }}" class="btn btn-primary">
                                 <i class="fas fa-plus-circle"></i> Add Asset for Available
                             </a>
+                            <form action="{{ route('availables.export') }}" method="GET" class="d-inline-block">
+                                <div class="input-group">
+                                    <select name="type" class="form-select">
+                                        <option value="">Select type</option>
+                                        <option value="xlsx">XLSX</option>
+                                        <option value="csv">CSV</option>
+                                        <option value="xls">XLS</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-download"></i> Export
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                     
                     <div class="card-body">
                         <!-- Search Form -->
                         <form action="{{ route('availables.index') }}" method="GET" class="mb-4">
-                            <div class="input-group">
-                                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search available asset..." class="form-control">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-search"></i> Search
-                                </button>
+                            <div class="row g-3">
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search available asset..." class="form-control">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-search"></i> Search
+                                        </button>
                             </div>
-                        </form>
+                        </div>
 
-                        <form action="{{ route('availables.export') }}" method="GET" class="d-inline-block">
-                            <div class="input-group">
-                                <select name="type" class="form-select">
-                                    <option value="">Select type</option>
-                                    <option value="xlsx">XLSX</option>
-                                    <option value="csv">CSV</option>
-                                    <option value="xls">XLS</option>
-                                </select>
-                                <button type="submit" class="btn-custom btn-success">
-                                    <i class="fas fa-download"></i> Export
-                                </button>
-                            </div>
-                        </form>
+                        
 
                         <!-- Pagination and Entries Section -->
-                        <div class="d-flex justify-content-between mb-3">
-                            <div class="form-inline">
+                        <div class="col-md-4">
+                            <div class="input-group">
                                 <label for="perPage" class="me-2">Show:</label>
-                                <form id="perPageForm" action="{{ route('availables.index') }}" method="GET" class="form-inline">
-                                    <input type="hidden" name="search" value="{{ request('search') }}">
                                     <select id="perPage" name="per_page" class="form-select" onchange="document.getElementById('perPageForm').submit();">
                                     <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
                                     <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
@@ -62,10 +68,9 @@ use Carbon\Carbon;
                                     <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
                                 </select>
                             </div>
-                            <div>
-                                {{ $available->links() }}
-                            </div>
                         </div>
+                    </div>
+                </form>
 
                         <!-- Asset Table -->
                         <div class="table-responsive">
@@ -112,15 +117,14 @@ use Carbon\Carbon;
                                 </tbody>                                
                             </table>
                         </div>
-                        <div class="d-flex justify-content-center mt-3">
-                        {{ $available->links('pagination::bootstrap-5') }}
+                        <div class="d-flex justify-content-center mt-4">
+                        {{ $available->appends(request()->query())->links('pagination::bootstrap-5') }}
                         </div>    
                     </div>
                 </div>
             </div>
         </div>
     </div>
-@endsection
 
 <!-- Custom CSS for Styling -->
 <style>
@@ -142,10 +146,53 @@ use Carbon\Carbon;
     .text-danger {
     color: red !important;
     font-weight: bold;
-}
-.text-success {
-    color: green !important;
-    font-weight: bold;
-}
+    }
+    .text-success {
+        color: green !important;
+        font-weight: bold;
+    }
+    .table {
+        border-collapse: collapse;
+    }
+
+    .table-bordered th, 
+    .table-bordered td {
+        border: 1px solid #dee2e6;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .table thead th {
+        font-size: 14px;
+        font-weight: bold;
+        white-space: nowrap;
+        background-color: #343a40;
+        color: #fff;
+        border: 1px solid #454d55;
+        text-transform: capitalize;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f8f9fa;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #e9ecef;
+    }
+
+    td, th {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .table-responsive {
+        margin-top: 20px;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        overflow-x: auto;
+        background-color: #ffffff;
+    }
 
 </style>
+@endsection
+

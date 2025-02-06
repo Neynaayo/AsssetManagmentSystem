@@ -15,9 +15,9 @@ class CompanySeeder extends Seeder
     public function run()
     {
         $companies = [
-            ['code' => 'PNMS', 'name' => 'Puncak Niaga Management Services Sdn Bhd'],
-            ['code' => 'PNCSB', 'name' => 'Puncak Niaga Construction Sdn Bhd'],
-            ['code' => 'Danum', 'name' => 'Danum Sinar Sdn Bhd'],
+            ['code' => 'PNMS', 'name' => 'Puncak Niaga Management Services Sdn. Bhd.'],
+            ['code' => 'PNCSB', 'name' => 'Puncak Niaga Construction Sdn. Bhd.'],
+            ['code' => 'Danum', 'name' => 'Danum Sinar Sdn. Bhd.'],
             ['code' => 'TRI', 'name' => 'TRIplc Berhad'],
         ];
 

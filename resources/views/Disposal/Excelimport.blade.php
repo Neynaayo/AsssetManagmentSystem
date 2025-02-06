@@ -38,6 +38,9 @@
                     <button type="submit" class="btn btn-primary">Import</button>
                 </div>
                 </form>
+                <br>
+                <a href="{{ route('disposals.index') }}" class="btn btn-primary float-end">View Asset Disposal List</a>
+
             </div>
             </div>
             </div>

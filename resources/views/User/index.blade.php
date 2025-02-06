@@ -9,15 +9,31 @@
         <div class="row">
             <div class="col-md-12">
                 @if (session('status'))
-                <div class="alert alert-success">{{ session('status') }}</div>
-             @endif
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('status') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
                 <div class="card shadow-sm">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h4>User Management</h4>
-                        <div>
+                    <div class="card-header d-flex justify-content-between align-items-center p-3">
+                        <h4 class="mb-0">User Management</h4>
+                        <div class="d-flex gap-2">
                             <a href="{{ route('users.create') }}" class="btn btn-primary">
                                 <i class="fas fa-plus-circle"></i> Add User
                             </a>
+                            <form action="{{ route('users.export') }}" method="GET" class="d-inline-block">
+                                <div class="input-group">
+                                    <select name="type" class="form-select">
+                                        <option value="">Select type</option>
+                                        <option value="xlsx">XLSX</option>
+                                        <option value="csv">CSV</option>
+                                        <option value="xls">XLS</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-download"></i> Export
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                     
@@ -32,19 +48,7 @@
                             </div>
                         </form>
 
-                        <form action="{{ route('users.export') }}" method="GET" class="d-inline-block">
-                            <div class="input-group">
-                                <select name="type" class="form-select">
-                                    <option value="">Select type</option>
-                                    <option value="xlsx">XLSX</option>
-                                    <option value="csv">CSV</option>
-                                    <option value="xls">XLS</option>
-                                </select>
-                                <button type="submit" class="btn-custom btn-success">
-                                    <i class="fas fa-download"></i> Export
-                                </button>
-                            </div>
-                        </form>
+                        
 
                        <!-- Pagination and Entries Section -->
                         <div class="d-flex justify-content-between mb-3">
@@ -67,7 +71,7 @@
 
                         <!-- User Table -->
                         <div class="table-responsive">
-                            <table class="table table-hover table-striped align-middle">
+                            <table class="table table-bordered table-striped align-middle text-center">
                                 <thead class="table-dark">
                                     <tr>
                                         <th>Name</th>
@@ -129,4 +133,45 @@
     .form-select, .form-control {
         max-width: 200px;
     }
+    .table {
+    border-collapse: collapse;
+}
+
+.table-bordered th, 
+.table-bordered td {
+    border: 1px solid #dee2e6;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.table thead th {
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+    background-color: #343a40;
+    color: #fff;
+    border: 1px solid #454d55;
+    text-transform: capitalize;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f8f9fa;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+td, th {
+    padding: 12px;
+    font-size: 14px;
+}
+
+.table-responsive {
+    margin-top: 20px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    overflow-x: auto;
+    background-color: #ffffff;
+}
 </style>

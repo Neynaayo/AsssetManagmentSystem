@@ -11,7 +11,9 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <table class="table">
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped align-middle text-center">
+            <thead class="table-dark">
         <thead>
             <tr>
                 <th>ID</th>
@@ -36,5 +38,50 @@
             @endforeach
         </tbody>
     </table>
+    </div>
 </div>
+
 @endsection
+<style>
+    .table {
+    border-collapse: collapse;
+    }
+    
+    .table-bordered th, 
+    .table-bordered td {
+        border: 1px solid #dee2e6;
+        vertical-align: middle;
+        text-align: center;
+    }
+    
+    .table thead th {
+        font-size: 14px;
+        font-weight: bold;
+        white-space: nowrap;
+        background-color: #343a40;
+        color: #fff;
+        border: 1px solid #454d55;
+        text-transform: capitalize;
+    }
+    
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f8f9fa;
+    }
+    
+    .table-hover tbody tr:hover {
+        background-color: #e9ecef;
+    }
+    
+    td, th {
+        padding: 12px;
+        font-size: 14px;
+    }
+    
+    .table-responsive {
+        margin-top: 20px;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        overflow-x: auto;
+        background-color: #ffffff;
+    }
+    </style>

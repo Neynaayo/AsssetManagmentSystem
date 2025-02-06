@@ -9,25 +9,6 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-12">
-                {{-- <!-- Success Modal -->
-                @if (session('status'))
-                    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="successModalLabel">Success</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    {{ session('status') }}
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endif --}}
                 @if (session('status'))
                 <div class="alert alert-success">{{ session('status') }}</div>
                 @endif
@@ -40,6 +21,10 @@
                     <div class="card-body">
                         <form action="{{ route('assets.store') }}" method="POST">
                             @csrf
+
+                            <div class="row">
+                                <!-- Left Column -->
+                                <div class="col-md-6">
 
                             <div class="mb-3">
                                 <label>Location</label>
@@ -54,7 +39,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label>Serial Number</label>
+                                <label>Serial Number <span class="text-danger">*</span></label>
                                 <input type="text" name="serial_number" class="form-control" value="{{ old('serial_number') }}"/>
                                 @error('serial_number') <span class="text-danger">{{ $message }}</span>@enderror
                             </div>
@@ -70,6 +55,7 @@
                                 <input type="text" name="type" class="form-control" value="{{ old('type') }}"/>
                                 @error('type') <span class="text-danger">{{ $message }}</span>@enderror
                             </div>
+                            
 
                             <div class="mb-3">
                                 <label>Brand </label>
@@ -88,6 +74,10 @@
                                 <input type="text" name="spec" class="form-control" value="{{ old('spec') }}"/>
                                 @error('spec') <span class="text-danger">{{ $message }}</span>@enderror
                             </div>
+                        </div>
+
+                        <!-- Right Column -->
+                        <div class="col-md-6">
 
                            <!-- Current Owner Input -->
                             <div class="mb-3">
@@ -158,8 +148,8 @@
                                 <textarea name="remark" class="form-control">{{ old('remark') }}</textarea>
                                 @error('remark') <span class="text-danger">{{ $message }}</span>@enderror
                             </div>
-
-                            <div class="mb-3">
+                        </div>
+                            <div class="mb-3 text-end">
                                 <button type="submit" class="btn btn-primary">Save</button>
                             </div>
 

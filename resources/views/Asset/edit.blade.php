@@ -10,25 +10,7 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-12">
-                {{-- <!-- Success Modal -->
-                @if (session('status'))
-                    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="successModalLabel">Success</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    {{ session('status') }}
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endif --}}
+    
                 @if (session('status'))
                 <div class="alert alert-success">{{ session('status') }}</div>
              @endif
@@ -36,13 +18,17 @@
                 <div class="card">
                     <div class="card-header">
                         <h4>Edit Asset
-                            <a href="{{ route('assets.index') }}" class="btn btn-primary float-end">Back</a>
+                            <a href="javascript:history.back()" class="btn btn-primary float-end">Back</a>
                         </h4>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('assets.update', $assets->id) }}" method="POST">
                             @csrf
                             @method('PUT')
+
+                            <div class="row">
+                                <!-- Left Column -->
+                                <div class="col-md-6">
 
                             <div class="mb-3">
                                 <label>Location</label>
@@ -57,7 +43,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label>Serial Number</label>
+                                <label>Serial Number <span class="text-danger">*</span></label>
                                 <input type="text" name="serial_number" class="form-control" value="{{ $assets->serial_number }}" />
                                 @error('serial_number') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
@@ -91,14 +77,12 @@
                                 <input type="text" name="spec" class="form-control" value="{{ $assets->spec }}" />    
                                 @error('spec') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
+                        </div>
 
-                            {{-- <div class="mb-3">
-                                <label>User</label>
-                                <input type="text" name="user_id" class="form-control" value="{{ $assets->user_id }}" />    
-                                @error('user_id') <span class="text-danger">{{ $message }}</span> @enderror
-                            </div> --}}
-                            <!-- Current Owner Input -->
-                                <<div class="mb-3">
+                             <!-- Right Column -->
+                            <div class="col-md-6">
+
+                                <div class="mb-3">
                                     <label for="current_owner_name">Current Owner Name</label>
                                     <input type="text" name="current_owner_name" class="form-control" 
                                            value="{{ old('current_owner_name', $assets->currentOwner->name ?? '') }}" required>
@@ -137,13 +121,7 @@
                                     @endforeach
                                 </select>
                                 @error('department_id') <span class="text-danger">{{ $message }}</span> @enderror
-                            </div>                            
-
-                            {{-- <div class="mb-3">
-                                <label>Previous Owner</label>
-                                <input type="text" name="previous_user_id" class="form-control" value="{{ $assets->previous_user_id }}" />    
-                                @error('previous_user_id') <span class="text-danger">{{ $message }}</span> @enderror
-                            </div> --}}
+                            </div>                           
 
                             <div class="mb-3">
                                 <label>Domain</label>
@@ -182,8 +160,9 @@
                                 <textarea name="remark" class="form-control">{{ $assets->remark }}</textarea>
                                 @error('remark') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
-
-                            <div class="mb-3">
+                        </div>
+                        
+                        <div class="mb-3 text-end">
                                 <button type="submit" class="btn btn-primary">Update</button>
                             </div>
                         </form>  
@@ -232,6 +211,14 @@
         .custom-select2-dropdown .select2-results__option--highlighted {
             background-color: #d3d3d3;
             color: #000;
+        }
+        .text-danger {
+            font-size: 0.9em;
+            color: red !important;
+        }
+
+        select.form-control.select2 {
+            width: 100% !important;
         }
     </style>
 @endsection

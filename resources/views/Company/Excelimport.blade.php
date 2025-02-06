@@ -38,6 +38,9 @@
                     <button type="submit" class="btn btn-primary">Import</button>
                 </div>
                 </form>
+                <br>
+                <a href="{{ route('companies.index') }}" class="btn btn-primary float-end">View Company List</a>
+
             </div>
             </div>
             </div>

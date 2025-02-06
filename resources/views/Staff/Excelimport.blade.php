@@ -38,6 +38,9 @@
                     <button type="submit" class="btn btn-primary">Import</button>
                 </div>
                 </form>
+                <br>
+                <a href="{{ route('staffs.index') }}" class="btn btn-primary float-end">View Staff List</a>
+
             </div>
             </div>
             </div>

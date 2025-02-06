@@ -24,6 +24,19 @@ use Carbon\Carbon;
                             <a href="{{ route('disposal-statuses.index') }}" class="btn btn-secondary ms-2">
                                 <i class="fas fa-tag"></i> Add Disposal Status
                             </a>
+                            <form action="{{ route('disposals.export') }}" method="GET" class="d-inline-block">
+                              <div class="input-group">
+                                  <select name="type" class="form-select">
+                                      <option value="">Select type</option>
+                                      <option value="xlsx">XLSX</option>
+                                      <option value="csv">CSV</option>
+                                      <option value="xls">XLS</option>
+                                  </select>
+                                  <button type="submit" class="btn btn-success">
+                                      <i class="fas fa-download"></i> Export
+                                  </button>
+                              </div>
+                          </form>
                         </div>
                     </div>
                     
@@ -109,44 +122,31 @@ use Carbon\Carbon;
                               </div>
                             </div>
 
-                        <form action="{{ route('disposals.export') }}" method="GET" class="d-inline-block">
-                            <div class="input-group">
-                                <select name="type" class="form-select">
-                                    <option value="">Select type</option>
-                                    <option value="xlsx">XLSX</option>
-                                    <option value="csv">CSV</option>
-                                    <option value="xls">XLS</option>
-                                </select>
-                                <button type="submit" class="btn-custom btn-success">
-                                    <i class="fas fa-download"></i> Export
-                                </button>
-                            </div>
-                        </form>
+                      
 
                        
 
                         <!-- Pagination and Entries Section -->
-                        <div class="d-flex justify-content-between mb-3">
-                            <div class="form-inline">
+                        <div class="col-md-4">
+                          <div class="input-group">
                                 <label for="perPage" class="me-2">Show:</label>
-                                <form id="perPageForm" action="{{ route('disposals.index') }}" method="GET" class="form-inline">
-                                  <input type="hidden" name="search" value="{{ request('search') }}">
-                                  <select id="perPage" name="per_page" class="form-select" onchange="document.getElementById('perPageForm').submit();">
+                                  <select id="perPage" name="per_page" class="form-select" onchange="this.form.submit()">
                                       <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
                                       <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
                                       <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
                                       <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
                                   </select>
-                              </form>
+            
                             </div>
                             <div>
                                 {{ $disposals->links() }}
                             </div>
                         </div>
+                      </form>
 
                         <!-- Asset Table -->
                         <div class="table-responsive">
-                            <table class="table table-hover table-striped align-middle">
+                            <table class="table table-bordered table-striped align-middle text-center">
                                 <thead class="table-dark">
                                     <tr>
                                         <th>No</th>
@@ -264,5 +264,46 @@ use Carbon\Carbon;
     transform: translateY(-1px);
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
+  .table {
+    border-collapse: collapse;
+}
+
+.table-bordered th, 
+.table-bordered td {
+    border: 1px solid #dee2e6;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.table thead th {
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+    background-color: #343a40;
+    color: #fff;
+    border: 1px solid #454d55;
+    text-transform: capitalize;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f8f9fa;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+td, th {
+    padding: 12px;
+    font-size: 14px;
+}
+
+.table-responsive {
+    margin-top: 20px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    overflow-x: auto;
+    background-color: #ffffff;
+}
 
 </style>

@@ -39,6 +39,8 @@
                     <button type="submit" class="btn btn-primary">Import</button>
                 </div>
                 </form>
+                <br>
+                <a href="{{ route('loans.index') }}" class="btn btn-primary float-end">View Asset Loan List</a>
             </div>
             </div>
             </div>
