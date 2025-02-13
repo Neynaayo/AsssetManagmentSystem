@@ -6,6 +6,7 @@
             background-size: 400% 400%;
             animation: gradient 15s ease infinite;
             min-height: 100vh;
+            width: 100vw;
             display: flex;
             align-items: center;
             justify-content: center;
