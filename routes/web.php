@@ -158,7 +158,7 @@ Route::middleware(['role:1,2,3'])->group(function () {
     Route::get('Asset/{id}/edit',[App\Http\Controllers\AssetController::class,'edit'])->name('assets.edit');
     Route::put('Asset/{id}/edit',[App\Http\Controllers\AssetController::class,'update'])->name('assets.update');
     //DELETE Asset
-    Route::get('Asset/{id}/delete',[App\Http\Controllers\AssetController::class,'destroy'])->name('assets.destroy');
+    Route::delete('Asset/{id}',[App\Http\Controllers\AssetController::class,'destroy'])->name('assets.destroy');
 
     //for import Excel
     Route::get('Asset/import',[App\Http\Controllers\AssetController::class,'import'])->name('assets.import');

@@ -92,7 +92,7 @@ public function index(Request $request)
             'manual_location' => 'nullable|string|max:255',
             'manual_serial_number' => 'nullable|string|max:255',
             'manual_spec' => 'nullable|string|max:255',
-            'date_loan' => 'required|date',
+            'date_loan' => 'nullable|date',
             'disposal_status_id' => 'required|exists:disposal_statuses,id',
             'remark' => 'nullable|string|max:255',
         ]);
@@ -156,7 +156,7 @@ public function index(Request $request)
         // 'loan_by' => 'nullable|exists:staff,id',
         // 'manual_loan_by' => 'nullable|string|max:255',
         'disposal_status_id' => 'required|exists:disposal_statuses,id',
-        'date_loan' => 'required|date',
+        'date_loan' => 'nullable|date',
         // 'until_date_loan' => 'required|date|after:date_loan',
         'remark' => 'nullable|string|max:255',
     ]);

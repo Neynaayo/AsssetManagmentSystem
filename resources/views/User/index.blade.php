@@ -95,7 +95,8 @@
                                                 <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display: inline-block;">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure To delete This User?')">
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm"
+                                                    onclick="return confirmDelete('{{ $user->name }}', '{{ $user->role->name}}')">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>
@@ -115,6 +116,17 @@
         </div>
     </div>
 @endsection
+
+<!-- JavaScript for Confirmation Dialog -->
+<script>
+    function confirmDelete(assetName, serialNumber) {
+        // Construct the confirmation message
+        const message = `Are you sure you want to delete this asset?\n\nAsset: ${assetName} - ${serialNumber}`;
+
+        // Show the confirmation dialog
+        return confirm(message);
+    }
+</script>
 
 <!-- Custom CSS for Styling -->
 <style>

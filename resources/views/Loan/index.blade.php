@@ -120,7 +120,8 @@ use Carbon\Carbon;
                                                 <form action="{{ route('loans.destroy', $loan->id) }}" method="POST" style="display: inline-block;">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure you want to delete this loan?')">
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm" 
+                                                    onclick="return confirmDelete('{{ $loan->asset->asset_name }}', '{{ $loan->asset->serial_number }}')">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>  
@@ -138,6 +139,17 @@ use Carbon\Carbon;
             </div>
         </div>
     </div>
+
+    <!-- JavaScript for Confirmation Dialog -->
+    <script>
+        function confirmDelete(assetName, serialNumber) {
+            // Construct the confirmation message
+            const message = `Are you sure you want to delete this asset?\n\nAsset: ${assetName} - ${serialNumber}`;
+
+            // Show the confirmation dialog
+            return confirm(message);
+        }
+    </script>
 
 <!-- Custom CSS for Styling -->
 <style>

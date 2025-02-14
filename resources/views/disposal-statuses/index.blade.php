@@ -31,7 +31,8 @@
                         <form action="{{ route('disposal-statuses.destroy', $status) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure To delete This Status?')">Delete</button>
+                            <button type="submit" class="btn btn-danger" 
+                             onclick="return confirmDelete( '{{ $status->name }}')">Delete</button>
                         </form>
                     </td>
                 </tr>
@@ -41,7 +42,20 @@
     </div>
 </div>
 
+
 @endsection
+
+<!-- JavaScript for Confirmation Dialog -->
+<script>
+    function confirmDelete(assetName, serialNumber) {
+        // Construct the confirmation message
+        const message = `Are you sure you want to delete this asset?\n\nAsset: ${assetName} - ${serialNumber}`;
+
+        // Show the confirmation dialog
+        return confirm(message);
+    }
+</script>
+
 <style>
     .table {
     border-collapse: collapse;

@@ -129,7 +129,8 @@
                                                     <form action="{{ route('assets.destroy', $asset->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this asset?');">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                        onclick="return confirmDelete('{{ $asset->asset_name }}', '{{ $asset->serial_number }}')">
                                                             <i class="fas fa-trash"></i>
                                                         </button>
                                                     </form>
@@ -199,6 +200,15 @@
         overflow-x: auto;
         background-color: #ffffff;
     }
-
     </style>
+    <!-- JavaScript for Confirmation Dialog -->
+    <script>
+        function confirmDelete(assetName, serialNumber) {
+            // Construct the confirmation message
+            const message = `Are you sure you want to delete this asset?\n\nAsset: ${assetName} - ${serialNumber}`;
+
+            // Show the confirmation dialog
+            return confirm(message);
+        }
+    </script>
 @endsection

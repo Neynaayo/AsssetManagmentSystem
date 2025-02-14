@@ -107,7 +107,8 @@ use Carbon\Carbon;
                                                 <form action="{{ route('availables.destroy', $availables->id) }}" method="POST" style="display: inline-block;">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure to delete this asset Available?')">
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm" 
+                                                    onclick="return confirmDelete('{{ $availables->asset->asset_name }}', '{{ $availables->asset->serial_number }}')">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>
@@ -125,6 +126,17 @@ use Carbon\Carbon;
             </div>
         </div>
     </div>
+
+    <!-- JavaScript for Confirmation Dialog -->
+    <script>
+        function confirmDelete(assetName, serialNumber) {
+            // Construct the confirmation message
+            const message = `Are you sure you want to delete this asset?\n\nAsset: ${assetName} - ${serialNumber}`;
+
+            // Show the confirmation dialog
+            return confirm(message);
+        }
+    </script>
 
 <!-- Custom CSS for Styling -->
 <style>
