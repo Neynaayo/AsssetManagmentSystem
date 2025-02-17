@@ -72,17 +72,29 @@ class LoanImport implements ToCollection, WithHeadingRow
      * Format date to Y-m-d.
      */
     private function formatDate($date)
-    {
-        try {
-            if (is_numeric($date)) {
-                // Handle Excel serialized date format
-                return Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($date))->format('Y-m-d');
+        {
+            try {
+                if (is_numeric($date)) {
+                    // Handle Excel serialized date format
+                    return Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($date))->format('Y-m-d');
+                }
+
+                // Define possible date formats
+                $formats = ['d/m/Y', 'd-m-Y', 'Y/m/d', 'Y-m-d', 'm/d/Y', 'm-d-Y'];
+
+                // Try parsing the date with different formats
+                foreach ($formats as $format) {
+                    try {
+                        return Carbon::createFromFormat($format, $date)->format('Y-m-d');
+                    } catch (\Exception $e) {
+                        // Ignore and try the next format
+                        continue;
+                    }
+                }
+            } catch (\Exception $e) {
+                return null; // Return null if the date is invalid
             }
 
-            // Parse date in d/m/Y format
-            return Carbon::createFromFormat('d/m/Y', $date)->format('Y-m-d');
-        } catch (\Exception $e) {
-            return null; // Return null if the date is invalid
+            return null; // If no format matches, return null
         }
-    }
 }

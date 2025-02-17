@@ -44,11 +44,11 @@ class AvailableImport implements ToCollection, WithHeadingRow
             }
 
             // Find existing available history or create a new one
-            $loan = History::where('asset_id', $asset->id)->where('status', 'AVAILABLE')->first();
+            $available = History::where('asset_id', $asset->id)->where('status', 'AVAILABLE')->first();
 
-            if ($loan) {
+            if ($available) {
                 // Update existing available history
-                $loan->update([
+                $available->update([
                     // 'loan_by' => $staff ? $staff->id : null,
                     // 'date_loan' => $dateLoan,
                     // 'until_date_loan' => $untilDateLoan,
@@ -68,21 +68,21 @@ class AvailableImport implements ToCollection, WithHeadingRow
         }
     }
 
-    /**
-     * Format date to Y-m-d.
-     */
-    private function formatDate($date)
-    {
-        try {
-            if (is_numeric($date)) {
-                // Handle Excel serialized date format
-                return Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($date))->format('Y-m-d');
-            }
+    // /**
+    //  * Format date to Y-m-d.
+    //  */
+    // private function formatDate($date)
+    // {
+    //     try {
+    //         if (is_numeric($date)) {
+    //             // Handle Excel serialized date format
+    //             return Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($date))->format('Y-m-d');
+    //         }
 
-            // Parse date in d/m/Y format
-            return Carbon::createFromFormat('d/m/Y', $date)->format('Y-m-d');
-        } catch (\Exception $e) {
-            return null; // Return null if the date is invalid
-        }
-    }
+    //         // Parse date in d/m/Y format
+    //         return Carbon::createFromFormat('d/m/Y', $date)->format('Y-m-d');
+    //     } catch (\Exception $e) {
+    //         return null; // Return null if the date is invalid
+    //     }
+    // }
 }

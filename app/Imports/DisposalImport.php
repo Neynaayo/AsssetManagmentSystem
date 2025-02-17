@@ -19,7 +19,7 @@ class DisposalImport implements ToCollection, WithHeadingRow
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
-            // Format dates
+            // Format dates - Assume Dates Loan as a Date Disposal (goes into the same column)
             $dateLoan = isset($row['date_disposals']) ? $this->formatDate($row['date_disposals']) : null;
 
             // Find or create asset by serial number
@@ -34,22 +34,24 @@ class DisposalImport implements ToCollection, WithHeadingRow
                 ]
             );
 
-            // Find or create disposal status
-            $disposalStatus = null;
+            // Find the disposal status by name first before creating
             if (isset($row['disposal_status'])) {
-                $disposalStatus = DisposalStatus::firstOrCreate(
-                    ['name' => $row['disposal_status']]
-                );
+                $disposalStatus = DisposalStatus::where('name', trim($row['disposal_status']))->first();
+                
+                if (!$disposalStatus) {
+                    $disposalStatus = DisposalStatus::create(['name' => trim($row['disposal_status'])]);
+                }
             }
 
+
             // Find existing loan history or create a new one
-            $loan = History::where('asset_id', $asset->id)
+            $disposal = History::where('asset_id', $asset->id)
                            ->where('status', 'Disposal')
                            ->first();
 
-            if ($loan) {
+            if ($disposal) {
                 // Update existing loan history
-                $loan->update([
+                $disposal->update([
                     'date_loan' => $dateLoan,
                     'remark' => $row['remark'],
                     'disposal_status_id' => $disposalStatus ? $disposalStatus->id : null,
@@ -71,17 +73,30 @@ class DisposalImport implements ToCollection, WithHeadingRow
      * Format date to Y-m-d.
      */
     private function formatDate($date)
-    {
-        try {
-            if (is_numeric($date)) {
-                // Handle Excel serialized date format
-                return Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($date))->format('Y-m-d');
+        {
+            try {
+                if (is_numeric($date)) {
+                    // Handle Excel serialized date format
+                    return Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($date))->format('Y-m-d');
+                }
+
+                // Define possible date formats
+                $formats = ['d/m/Y', 'd-m-Y', 'Y/m/d', 'Y-m-d', 'm/d/Y', 'm-d-Y'];
+
+                // Try parsing the date with different formats
+                foreach ($formats as $format) {
+                    try {
+                        return Carbon::createFromFormat($format, $date)->format('Y-m-d');
+                    } catch (\Exception $e) {
+                        // Ignore and try the next format
+                        continue;
+                    }
+                }
+            } catch (\Exception $e) {
+                return null; // Return null if the date is invalid
             }
 
-            // Parse date in d/m/Y format
-            return Carbon::createFromFormat('d/m/Y', $date)->format('Y-m-d');
-        } catch (\Exception $e) {
-            return null; // Return null if the date is invalid
+            return null; // If no format matches, return null
         }
-    }
+
 }

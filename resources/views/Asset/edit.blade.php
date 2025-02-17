@@ -89,12 +89,12 @@
                                     @error('current_owner_name') <span class="text-danger">{{ $message }}</span> @enderror
                                 </div>
                                 
-                                <div class="mb-3">
+                                {{-- <div class="mb-3">
                                     <label for="current_owner_email">Current Owner Email</label>
                                     <input type="email" name="current_owner_email" class="form-control" 
                                            value="{{ old('current_owner_email', $assets->currentOwner->email ?? '') }}">
                                     @error('current_owner_email') <span class="text-danger">{{ $message }}</span> @enderror
-                                </div>
+                                </div> --}}
                                 
                                 <div class="mb-3">
                                     <label for="prev_owner_name">Previous Owner Name</label>
@@ -103,12 +103,12 @@
                                     @error('prev_owner_name') <span class="text-danger">{{ $message }}</span> @enderror
                                 </div>
                                 
-                                <div class="mb-3">
+                                {{-- <div class="mb-3">
                                     <label for="prev_owner_email">Previous Owner Email</label>
                                     <input type="email" name="prev_owner_email" class="form-control" 
                                            value="{{ old('prev_owner_email', $assets->previousOwner->email ?? '') }}">
                                     @error('prev_owner_email') <span class="text-danger">{{ $message }}</span> @enderror
-                                </div>
+                                </div> --}}
                                 
                             <div class="mb-3">
                                 <label>Department</label>
