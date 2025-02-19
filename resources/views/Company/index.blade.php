@@ -122,7 +122,7 @@
     <script>
         function confirmDelete(assetName, serialNumber) {
             // Construct the confirmation message
-            const message = `Are you sure you want to delete this asset?\n\nAsset: ${assetName} - ${serialNumber}`;
+            const message = `Are you sure you want to delete this Company?\n\nCompany Details: ${assetName} - ${serialNumber}`;
 
             // Show the confirmation dialog
             return confirm(message);

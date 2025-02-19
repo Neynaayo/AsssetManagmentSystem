@@ -18,66 +18,74 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 class AssetController extends Controller
 {
-    public function index(Request $request)
+        public function index(Request $request)
     {
         // Get request inputs
         $search = $request->input('search');
         $departmentId = $request->input('department_id');
         $perPage = $request->input('per_page', 10);
-    
+
         // Get all departments for the dropdown
         $departments = Department::all();
-    
+
         // Query assets with relationships
-        $assetsQuery = Asset::with(['department', 'currentOwner', 'previousOwner', 'company']);
-    
+        $assetsQuery = Asset::with(['department', 'currentOwner', 'previousOwner', 'company'])
+            ->leftJoin('staff as current_staff', 'assets.user_id', '=', 'current_staff.id')
+            ->leftJoin('staff as previous_staff', 'assets.previous_user_id', '=', 'previous_staff.id')
+            ->select('assets.*');
+
         // Apply filters
         if (Auth::user()->roleid == 1) {
             // Super Admin: view all assets
             $assetsQuery->when($search, function ($query, $search) {
                 $query->where(function ($query) use ($search) {
                     $query->where('asset_name', 'like', "%{$search}%")
-                          ->orWhere('serial_number', 'like', "%{$search}%")
-                          ->orWhere('asset_no', 'like', "%{$search}%")
-                          ->orWhere('location', 'like', "%{$search}%")
-                          ->orWhere('brand', 'like', "%{$search}%")
-                          ->orWhere('model', 'like', "%{$search}%")
-                          ->orWhere('type', 'like', "%{$search}%")
-                          ->orWhere('spec', 'like', "%{$search}%")
-                          ->orWhere('domain', 'like', "%{$search}%")
-                          ->orWhere('remark', 'like', "%{$search}%");
+                        ->orWhere('serial_number', 'like', "%{$search}%")
+                        ->orWhere('asset_no', 'like', "%{$search}%")
+                        ->orWhere('location', 'like', "%{$search}%")
+                        ->orWhere('brand', 'like', "%{$search}%")
+                        ->orWhere('model', 'like', "%{$search}%")
+                        ->orWhere('type', 'like', "%{$search}%")
+                        ->orWhere('spec', 'like', "%{$search}%")
+                        ->orWhere('domain', 'like', "%{$search}%")
+                        ->orWhere('remark', 'like', "%{$search}%")
+                        ->orWhere('current_staff.name', 'like', "%{$search}%") // Search current owner
+                        ->orWhere('previous_staff.name', 'like', "%{$search}%"); // Search previous owner
                 });
             });
         } else {
             // Admin: view only assets from their department
-            $assetsQuery->where('department_id', Auth::user()->department_id)
+            $assetsQuery->where('assets.department_id', Auth::user()->department_id)
                         ->when($search, function ($query, $search) {
                             $query->where(function ($query) use ($search) {
                                 $query->where('asset_name', 'like', "%{$search}%")
-                                      ->orWhere('serial_number', 'like', "%{$search}%")
-                                      ->orWhere('asset_no', 'like', "%{$search}%")
-                                      ->orWhere('location', 'like', "%{$search}%")
-                                      ->orWhere('brand', 'like', "%{$search}%")
-                                      ->orWhere('model', 'like', "%{$search}%")
-                                      ->orWhere('type', 'like', "%{$search}%")
-                                      ->orWhere('spec', 'like', "%{$search}%")
-                                      ->orWhere('domain', 'like', "%{$search}%")
-                                      ->orWhere('remark', 'like', "%{$search}%");
+                                    ->orWhere('serial_number', 'like', "%{$search}%")
+                                    ->orWhere('asset_no', 'like', "%{$search}%")
+                                    ->orWhere('location', 'like', "%{$search}%")
+                                    ->orWhere('brand', 'like', "%{$search}%")
+                                    ->orWhere('model', 'like', "%{$search}%")
+                                    ->orWhere('type', 'like', "%{$search}%")
+                                    ->orWhere('spec', 'like', "%{$search}%")
+                                    ->orWhere('domain', 'like', "%{$search}%")
+                                    ->orWhere('remark', 'like', "%{$search}%")
+                                    ->orWhere('current_staff.name', 'like', "%{$search}%") // Search current owner
+                                    ->orWhere('previous_staff.name', 'like', "%{$search}%"); // Search previous owner
                             });
                         });
         }
-    
-        // Apply department filter if selected
+
+        // Apply department filter if selected (Fixed)
         $assetsQuery->when($departmentId, function ($query, $departmentId) {
-            $query->where('department_id', $departmentId);
+            $query->where('assets.department_id', $departmentId); // Specify table to avoid ambiguity
         });
-    
+
         // Paginate results
         $assets = $assetsQuery->paginate($perPage);
-    
+
         // Pass variables to the view
         return view('Asset.index', compact('assets', 'search', 'departments', 'departmentId', 'perPage'));
     }
+
     
 
 

@@ -49,6 +49,11 @@
                                         <button type="submit" class="btn btn-primary">
                                             <i class="fas fa-search"></i>
                                         </button>
+                                        <div>
+                                        <a href="{{ route('assets.index') }}" class="btn btn-secondary">
+                                            <i class="fas fa-undo me-1"></i> Reset
+                                          </a>
+                                        </div>
                                     </div>
                                 </div>
 

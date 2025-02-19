@@ -13,27 +13,31 @@
                 @endif
 
                 <div class="card shadow-sm">
-                    <div class="card-header d-flex justify-content-between align-items-center">
+                    <div class="card-header d-flex justify-content-between align-items-center p-3">
                         <h4>Staff Management</h4>
-                        <div>
+                        <div class="d-flex gap-2">
                             <a href="{{ route('staffs.create') }}" class="btn btn-primary">
                                 <i class="fas fa-plus-circle"></i> Add Staff
                             </a>
+                
+                            <!-- Make the export form align to the right -->
+                            <form action="{{ route('staffs.export') }}" method="GET" class="d-flex ms-auto">
+                                <div class="input-group">
+                                    <select name="type" class="form-select">
+                                        <option value="">Select type</option>
+                                        <option value="xlsx">XLSX</option>
+                                        <option value="csv">CSV</option>
+                                        <option value="xls">XLS</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-download"></i> Export
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                    <form action="{{ route('staffs.export') }}" method="GET" class="d-inline-block">
-                        <div class="input-group">
-                            <select name="type" class="form-select">
-                                <option value="">Select type</option>
-                                <option value="xlsx">XLSX</option>
-                                <option value="csv">CSV</option>
-                                <option value="xls">XLS</option>
-                            </select>
-                            <button type="submit" class="btn-custom btn-success">
-                                <i class="fas fa-download"></i> Export
-                            </button>
-                        </div>
-                    </form>
+                </div>
+                
                     
                     <div class="card mb-4">
                         <div class="card-header">
@@ -177,7 +181,7 @@
 <script>
     function confirmDelete(assetName, serialNumber) {
         // Construct the confirmation message
-        const message = `Are you sure you want to delete this asset?\n\nAsset: ${assetName} - ${serialNumber}`;
+        const message = `Are you sure you want to delete this Staff?\n\nStaff Information: ${assetName} - ${serialNumber}`;
 
         // Show the confirmation dialog
         return confirm(message);
