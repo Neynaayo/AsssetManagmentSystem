@@ -15,7 +15,7 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h4>Edit Asset
+                        <h4>Edit Company
                             <a href="{{ route('companies.index') }}" class="btn btn-primary float-end">Back</a>
                         </h4>
                     </div>
